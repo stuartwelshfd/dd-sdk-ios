@@ -23,6 +23,7 @@
  */
 
 #include "profile.h"
+#include "binary_image_resolver.h"
 
 #if defined(__APPLE__) && !TARGET_OS_WATCH
 
@@ -126,9 +127,15 @@ int64_t profile::uptime_ns_to_epoch_ns(uint64_t uptime_ns) const {
  * 4. Add completed samples to the profile
  */
 void profile::add_samples(const stack_trace_t* traces, size_t count) {
+    add_samples(traces, count, nullptr);
+}
+
+void profile::add_samples(const stack_trace_t* traces, size_t count, binary_image_cache* image_cache) {
     if (!traces) return;
-    
-    for (int i = 0; i < count; ++i) {
+
+    _samples.reserve(_samples.size() + count);
+
+    for (size_t i = 0; i < count; ++i) {
         const auto& trace = traces[i];
         
         // Build location IDs from stack frames
@@ -136,7 +143,7 @@ void profile::add_samples(const stack_trace_t* traces, size_t count) {
         location_ids.reserve(trace.frame_count);
         for (uint32_t j = 0; j < trace.frame_count; ++j) {
             const auto& frame = trace.frames[j];
-            uint32_t location_id = intern_frame(frame);
+            uint32_t location_id = intern_frame(frame, image_cache);
             location_ids.push_back(location_id);
         }
         
@@ -218,7 +225,26 @@ uint32_t profile::intern_string(const std::string& str) {
  * @return Location ID (1-based) for the frame's instruction address
  */
 uint32_t profile::intern_frame(const stack_frame_t& frame) {
-    uint32_t mapping_id = intern_binary(frame.image);
+    return intern_frame(frame, nullptr);
+}
+
+uint32_t profile::intern_frame(const stack_frame_t& frame, binary_image_cache* image_cache) {
+    auto existing_location = _location_lookup.find(frame.instruction_ptr);
+    if (existing_location != _location_lookup.end()) {
+        return existing_location->second;
+    }
+
+    binary_image_t resolved_image{};
+    const binary_image_t* image = &frame.image;
+
+    if (frame.image.load_address == 0 && image_cache) {
+        if (image_cache->lookup(frame.instruction_ptr, &resolved_image)) {
+            image = &resolved_image;
+        }
+    }
+
+    uint32_t mapping_id = intern_binary(*image);
+
     location_t location{};
     location.mapping_id = mapping_id;
     location.address = frame.instruction_ptr;
@@ -274,4 +300,3 @@ uint32_t profile::intern_location(const location_t& location) {
 } // namespace dd::profiler
 
 #endif // __APPLE__ && !TARGET_OS_WATCH
-

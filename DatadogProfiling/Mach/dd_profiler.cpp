@@ -15,8 +15,9 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <cstdlib>
 #include <cstring>
-#include <random>
 #include <mutex>
+#include <new>
+#include <random>
 
 // Profiling sampling backstop (see `callback`).
 // Typical profile span is ~1 minute; this cutoff includes additional slack beyond that.
@@ -182,7 +183,7 @@ public:
         // Create and populate the binary image cache early, before sampling starts.
         // This pre-loads binary image metadata (UUID, filename) for all currently
         // loaded images and watches for new ones via dyld notifications.
-        image_cache = new binary_image_cache();
+        image_cache = new (std::nothrow) binary_image_cache();
         // if cache allocation/start fails, keep profiling running
         if (!image_cache || !image_cache->load()) {
             delete image_cache;
@@ -220,6 +221,7 @@ public:
     void stop() {
         if (!profiler) return;
         status = DD_PROFILER_STATUS_STOPPED;
+        profiler->request_stop();
         profiler->stop_sampling();
     }
 
@@ -245,7 +247,11 @@ public:
         if (!profile) return nullptr;
 
         dd::profiler::profile* harvested = profile;
-        profile = new dd::profiler::profile(sampling_interval_ns);
+        profile = new (std::nothrow) dd::profiler::profile(sampling_interval_ns);
+        if (!profile) {
+            status = DD_PROFILER_STATUS_ALLOCATION_FAILED;
+            if (profiler) profiler->request_stop();
+        }
         return harvested;
     }
 
@@ -264,7 +270,7 @@ private:
 
         if (profiler) return true;
 
-        profile = new dd::profiler::profile(sampling_interval_ns);
+        profile = new (std::nothrow) dd::profiler::profile(sampling_interval_ns);
         if (!profile) {
             status = DD_PROFILER_STATUS_ALLOCATION_FAILED;
             return false;
@@ -273,7 +279,7 @@ private:
         sampling_config_t config = SAMPLING_CONFIG_DEFAULT;
         config.sampling_interval_nanos = sampling_interval_ns;
 
-        profiler = new mach_sampling_profiler(&config, callback, this);
+        profiler = new (std::nothrow) mach_sampling_profiler(&config, callback, this);
         if (!profiler) {
             delete profile;
             profile = nullptr;
@@ -300,8 +306,8 @@ private:
     /**
      * Static callback function to handle collected stack traces.
      *
-     * Resolves binary image information for each frame using the
-     * cached image data, then adds the samples to the profile.
+     * Lazily resolves binary image information for first-seen locations and
+     * adds the samples to the profile.
      *
      * @param traces Array of captured stack traces
      * @param count Number of traces in the array
@@ -312,21 +318,18 @@ private:
 
         dd_profiler* profiler = static_cast<dd_profiler*>(ctx);
 
-        // Resolve binary images in-place before adding to the profile
-        resolve_stack_trace_frames(traces, count, profiler->image_cache);
-
         std::lock_guard<std::mutex> lock(profiler->profile_mutex);
 
         dd::profiler::profile* profile = profiler->profile;
 
         if (!profile) return;
 
-        profile->add_samples(traces, count);
+        profile->add_samples(traces, count, profiler->image_cache);
 
         // Check for timeout after adding samples
         int64_t duration_ns = profile->end_timestamp() - profile->start_timestamp();
         if (duration_ns > profiler->timeout_ns) {
-            profiler->stop();
+            profiler->profiler->request_stop();
             profiler->status = DD_PROFILER_STATUS_TIMEOUT;
         }
     }
@@ -345,8 +348,10 @@ static void dd_profiler_auto_start() {
     set_main_thread(pthread_self());
 
     double sample_rate = dd_is_profiling_enabled() ? read_profiling_sample_rate() : 0;
-    g_dd_profiler = new dd::profiler::dd_profiler(sample_rate, is_active_prewarm());
-    g_dd_profiler->auto_start();
+    g_dd_profiler = new (std::nothrow) dd::profiler::dd_profiler(sample_rate, is_active_prewarm());
+    if (g_dd_profiler) {
+        g_dd_profiler->auto_start();
+    }
 
     // Reset profiling defaults to be re-evaluated again
     dd_delete_profiling_defaults();
@@ -357,7 +362,10 @@ static void dd_profiler_auto_start() {
 int dd_profiler_start(void) {
     std::lock_guard<std::mutex> lock(g_dd_profiler_mutex);
     if (!g_dd_profiler) {
-        g_dd_profiler = new dd::profiler::dd_profiler();
+        g_dd_profiler = new (std::nothrow) dd::profiler::dd_profiler();
+        if (!g_dd_profiler) {
+            return 0;
+        }
     }
     return g_dd_profiler->start();
 }
@@ -400,8 +408,10 @@ extern "C" {
 void dd_profiler_start_testing(double sample_rate, bool is_prewarming, int64_t timeout_ns) {
     std::lock_guard<std::mutex> lock(g_dd_profiler_mutex);
     delete g_dd_profiler;
-    g_dd_profiler = new dd::profiler::dd_profiler(sample_rate, is_prewarming, timeout_ns);
-    g_dd_profiler->auto_start();
+    g_dd_profiler = new (std::nothrow) dd::profiler::dd_profiler(sample_rate, is_prewarming, timeout_ns);
+    if (g_dd_profiler) {
+        g_dd_profiler->auto_start();
+    }
 }
 
 #ifdef __cplusplus

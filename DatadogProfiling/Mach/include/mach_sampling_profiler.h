@@ -14,13 +14,13 @@
 #if !TARGET_OS_WATCH
 
 #include <atomic>
-#include <condition_variable>
-#include <mutex>
 #include <mach/mach.h>
 #include <mach/thread_act.h>
 #include <mach/thread_info.h>
-#include <vector>
+#include <memory>
+#include <mutex>
 #include <pthread.h>
+#include <vector>
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,6 +40,8 @@ void set_main_thread(pthread_t thread);
 #endif
 
 namespace dd::profiler {
+
+class aggregation_worker;
 
 /**
  * @brief Mach-based sampling profiler
@@ -75,15 +77,32 @@ public:
     bool start_sampling();
 
     /**
-     * @brief Stops the sampling process
+     * @brief Stops the sampling process.
+     *
+     * When called from the sampling thread or the aggregation worker thread,
+     * this only requests an asynchronous stop and returns immediately. Full
+     * join/drain/reset must be completed later from a non-profiler thread.
+     *
+     * Timeout/callback paths should use `request_stop()` directly instead of
+     * calling `stop_sampling()` from within profiler-owned threads.
      */
     void stop_sampling();
 
     /**
      * @brief Requests a flush of the sample buffer and blocks until complete.
-     * The sampling thread flushes at its next safe point (start of loop iteration).
+     * The sampling thread swaps the active buffer at its next safe point and the
+     * aggregation worker drains all queued batches before unblocking the caller.
      */
     void request_flush();
+
+    /**
+     * @brief Requests that sampling stop at the next safe point.
+     *
+     * Unlike `stop_sampling()`, this does not join threads. It is intended for
+     * asynchronous stop requests issued from the aggregation callback path or
+     * other profiler-owned threads.
+     */
+    void request_stop();
 
     /**
      * @brief Atomic flag indicating if profiling is currently running
@@ -110,6 +129,8 @@ protected:
      * @brief Thread handle for the sampling thread
      */
     pthread_t sampling_thread{};
+    /// Cached Mach thread id for hot-path internal-thread filtering.
+    std::atomic<thread_t> sampling_thread_mach{MACH_PORT_NULL};
 
     /**
      * @brief Thread to profile when in single-thread mode
@@ -120,6 +141,11 @@ protected:
      * @brief Buffer for collecting stack traces
      */
     std::vector<stack_trace_t> sample_buffer;
+
+    /**
+     * @brief Serialized aggregation worker used to drain sampled traces off-thread.
+     */
+    std::unique_ptr<aggregation_worker> worker;
 
     /**
      * @brief Main sampling loop that collects stack traces from threads
@@ -135,9 +161,9 @@ protected:
     void sample_thread(thread_t thread, uint64_t interval_nanos);
 
     /**
-     * @brief Flushes the sample buffer (common implementation)
+     * @brief Returns true when the thread is owned by the profiler itself.
      */
-    void flush_buffer();
+    bool is_profiler_internal_thread(thread_t thread) const;
 
 private:
     /**
@@ -149,13 +175,8 @@ private:
      * @brief Mutex to protect start/stop operations from concurrent access
      */
     std::mutex state_mutex;
-
-    /**
-     * @brief Synchronization for flush request
-     */
-    std::atomic<bool> flush_requested{false};
-    std::mutex flush_mutex;
-    std::condition_variable flush_cv;
+    /// Publishes whether `sampling_thread` contains a live thread handle.
+    std::atomic<bool> sampling_thread_started{false};
 };
 
 } // namespace dd::profiler

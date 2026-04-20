@@ -9,6 +9,7 @@ import XCTest
 import DatadogInternal
 // swiftlint:disable duplicate_imports
 import DatadogMachProfiler
+import DatadogMachProfiler.Pprof
 import DatadogMachProfiler.Testing
 // swiftlint:enable duplicate_imports
 
@@ -51,6 +52,145 @@ final class DDProfilerTests: XCTestCase {
     func testDDProfiler_startTesting_withCustomTimeout() {
         dd_profiler_start_testing(100, false, 1.seconds.dd.toInt64Nanoseconds) // 1 second timeout
         XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING, "Profiler should start with custom timeout")
+    }
+
+    func testDDProfiler_timeoutDrainsQueuedAggregationOnFlush() {
+        dd_profiler_start_testing(100, false, 1) // 1ns timeout forces the async stop path quickly
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        for i in 0..<10_000 {
+            _ = sqrt(Double(i))
+        }
+
+        let profile = dd_profiler_flush_and_get_profile()
+        XCTAssertNotNil(profile, "Flush should still drain queued samples after timeout-driven stop")
+        if let profile {
+            XCTAssertGreaterThan(dd_pprof_sample_count(profile), 0, "Timed-out profiler should still return the aggregated samples it collected")
+            dd_pprof_destroy(profile)
+        }
+
+        let timeoutReached = expectation(description: "Profiler reaches timeout")
+        DispatchQueue.global().async {
+            for _ in 0..<100 {
+                if dd_profiler_get_status() == DD_PROFILER_STATUS_TIMEOUT {
+                    timeoutReached.fulfill()
+                    return
+                }
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+        }
+
+        wait(for: [timeoutReached], timeout: 1.5)
+    }
+
+    func testDDProfiler_timeoutThenManualStop_allowsRestart() {
+        dd_profiler_start_testing(100, false, 1) // 1ns timeout forces the callback/request_stop path quickly
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        for i in 0..<10_000 {
+            _ = sqrt(Double(i))
+        }
+
+        let harvestedProfile = dd_profiler_flush_and_get_profile()
+        XCTAssertNotNil(harvestedProfile, "Flush should force the timeout callback path to process queued samples")
+        if let harvestedProfile {
+            XCTAssertGreaterThan(dd_pprof_sample_count(harvestedProfile), 0, "Harvested profile should contain collected samples before the manual stop")
+            dd_pprof_destroy(harvestedProfile)
+        }
+
+        let timeoutReached = expectation(description: "Profiler reaches timeout")
+        DispatchQueue.global().async {
+            for _ in 0..<100 {
+                if dd_profiler_get_status() == DD_PROFILER_STATUS_TIMEOUT {
+                    timeoutReached.fulfill()
+                    return
+                }
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+        }
+
+        wait(for: [timeoutReached], timeout: 1.5)
+
+        let stopCompleted = expectation(description: "Manual stop completes after timeout")
+        DispatchQueue.global().async {
+            dd_profiler_stop()
+            stopCompleted.fulfill()
+        }
+
+        wait(for: [stopCompleted], timeout: 1.0)
+        let statusAfterStop = dd_profiler_get_status()
+        XCTAssertNotEqual(statusAfterStop, DD_PROFILER_STATUS_RUNNING, "Manual stop after timeout should leave the profiler inactive")
+
+        let profile = dd_profiler_get_profile()
+        XCTAssertNotNil(profile, "Manual stop after timeout should leave the profile readable")
+
+        XCTAssertEqual(dd_profiler_start(), 1, "Profiler should be able to start again after timeout then manual stop")
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING, "Manual stop should complete the full teardown needed for a later restart")
+    }
+
+    func testDDProfiler_flushHarvestsPartialBatch() {
+        dd_profiler_start_testing(100, false, 1.seconds.dd.toInt64Nanoseconds)
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        for i in 0..<2_000 {
+            _ = sqrt(Double(i))
+            if i % 100 == 0 {
+                Thread.sleep(forTimeInterval: 0.002)
+            }
+        }
+
+        let profile = dd_profiler_flush_and_get_profile()
+        XCTAssertNotNil(profile, "Flush should harvest samples even when the active batch is not full")
+        if let profile {
+            XCTAssertGreaterThan(dd_pprof_sample_count(profile), 0, "Partial-batch flush should still return collected samples")
+            dd_pprof_destroy(profile)
+        }
+    }
+
+    func testDDProfiler_doesNotIncludeProfilerInternalThreadsInProfile() throws {
+        dd_profiler_start_testing(100, false, 1.seconds.dd.toInt64Nanoseconds)
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        for i in 0..<10_000 {
+            _ = sqrt(Double(i))
+            if i % 500 == 0 {
+                Thread.sleep(forTimeInterval: 0.002)
+            }
+        }
+
+        let profile = try XCTUnwrap(dd_profiler_flush_and_get_profile())
+        defer { dd_pprof_destroy(profile) }
+
+        var data: UnsafeMutablePointer<UInt8>?
+        let size = dd_pprof_serialize(profile, &data)
+        defer { dd_pprof_free_serialized_data(data) }
+
+        XCTAssertGreaterThan(size, 0, "Serialized profile should not be empty")
+
+        let unpackedProfile = try XCTUnwrap(perftools__profiles__profile__unpack(nil, size, data))
+        defer { perftools__profiles__profile__free_unpacked(unpackedProfile, nil) }
+
+        var threadNames: Set<String> = []
+        for i in 0..<unpackedProfile.pointee.n_sample {
+            let sample = try XCTUnwrap(unpackedProfile.pointee.sample[i])
+
+            for j in 0..<sample.pointee.n_label {
+                guard let label = sample.pointee.label?[j] else { continue }
+
+                let keyString = try XCTUnwrap(unpackedProfile.pointee.string_table[Int(label.pointee.key)])
+                if String(cString: keyString) != "thread name" {
+                    continue
+                }
+
+                let valueString = try XCTUnwrap(unpackedProfile.pointee.string_table[Int(label.pointee.str)])
+                threadNames.insert(String(cString: valueString))
+            }
+        }
+
+        XCTAssertFalse(
+            threadNames.contains(where: { $0.hasPrefix("com.datadoghq.profiler.") }),
+            "Profiler-owned threads should not appear in the harvested profile"
+        )
     }
 
     func testDDProfiler_startTesting_withPrewarming_doesNotStart() {
