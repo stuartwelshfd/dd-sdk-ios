@@ -237,25 +237,53 @@ public:
 
     /**
      * Flushes the sampling buffer and returns the profile, swapping in a fresh one.
+     * The swap runs in the aggregation worker's ordered stream, giving this
+     * flush a deterministic profile boundary.
      *
      * @return The harvested profile, or nullptr if no profile exists.
      */
     profile* flush_and_get_profile() {
-        if (profiler) profiler->request_flush();
+        profile_swap_context swap_context{
+            this,
+            new (std::nothrow) dd::profiler::profile(sampling_interval_ns),
+            nullptr
+        };
 
-        std::lock_guard<std::mutex> lock(profile_mutex);
-        if (!profile) return nullptr;
-
-        dd::profiler::profile* harvested = profile;
-        profile = new (std::nothrow) dd::profiler::profile(sampling_interval_ns);
-        if (!profile) {
-            status = DD_PROFILER_STATUS_ALLOCATION_FAILED;
-            if (profiler) profiler->request_stop();
+        if (profiler) {
+            profiler->request_flush(swap_profile_action, &swap_context);
+        } else {
+            swap_profile_action(&swap_context);
         }
-        return harvested;
+
+        return swap_context.harvested;
     }
 
 private:
+    struct profile_swap_context {
+        dd_profiler* profiler;
+        dd::profiler::profile* replacement;
+        dd::profiler::profile* harvested;
+    };
+
+    static void swap_profile_action(void* ctx) {
+        if (!ctx) return;
+
+        auto* swap_context = static_cast<profile_swap_context*>(ctx);
+        dd_profiler* profiler = swap_context->profiler;
+        if (!profiler) return;
+
+        std::lock_guard<std::mutex> lock(profiler->profile_mutex);
+
+        swap_context->harvested = profiler->profile;
+        profiler->profile = swap_context->replacement;
+        swap_context->replacement = nullptr;
+
+        if (!profiler->profile) {
+            profiler->status = DD_PROFILER_STATUS_ALLOCATION_FAILED;
+            if (profiler->profiler) profiler->profiler->request_stop();
+        }
+    }
+
     /**
      * Creates the profile aggregator and sampling profiler.
      * No-op if already created.

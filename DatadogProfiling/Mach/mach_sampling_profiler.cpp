@@ -450,9 +450,9 @@ void mach_sampling_profiler::stop_sampling() {
     }
 }
 
-void mach_sampling_profiler::request_flush() {
+void mach_sampling_profiler::request_flush(flush_action_t action, void* action_ctx) {
     if (worker) {
-        worker->request_flush();
+        worker->request_flush(action, action_ctx);
     }
 }
 

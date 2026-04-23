@@ -52,6 +52,8 @@ class aggregation_worker;
  */
 class mach_sampling_profiler {
 public:
+    using flush_action_t = void (*)(void* ctx);
+
     /**
      * @brief Constructs a new profiler instance
      * 
@@ -92,8 +94,11 @@ public:
      * @brief Requests a flush of the sample buffer and blocks until complete.
      * The sampling thread swaps the active buffer at its next safe point and the
      * aggregation worker drains all queued batches before unblocking the caller.
+     *
+     * If provided, `action` runs on the aggregation worker after all work before
+     * this flush has completed and before later batches are processed.
      */
-    void request_flush();
+    void request_flush(flush_action_t action = nullptr, void* action_ctx = nullptr);
 
     /**
      * @brief Requests that sampling stop at the next safe point.

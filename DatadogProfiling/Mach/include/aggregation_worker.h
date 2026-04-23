@@ -28,6 +28,8 @@ namespace dd::profiler {
  */
 class aggregation_worker {
 public:
+    using flush_action_t = void (*)(void* ctx);
+
     aggregation_worker(
         size_t buffer_capacity,
         stack_trace_callback_t callback,
@@ -44,8 +46,11 @@ public:
 
     /**
      * @brief Blocks until all queued work before this request has been processed.
+     *
+     * If provided, `action` runs on the aggregation worker after all earlier
+     * work has completed and before later batches are processed.
      */
-    void request_flush();
+    void request_flush(flush_action_t action = nullptr, void* action_ctx = nullptr);
 
     /**
      * @brief Enqueues the active sampling buffer, reusing a spare buffer when possible.
@@ -82,6 +87,8 @@ private:
         kind item_kind;
         std::vector<stack_trace_t> traces;
         uint64_t flush_id = 0;
+        flush_action_t action = nullptr;
+        void* action_ctx = nullptr;
     };
 
     size_t buffer_capacity;
@@ -95,6 +102,7 @@ private:
     std::atomic<thread_t> worker_mach_thread{MACH_PORT_NULL};
 
     std::deque<work_item> pending_work;
+    std::deque<work_item> requested_flushes;
     std::vector<std::vector<stack_trace_t>> reusable_buffers;
 
     std::mutex work_mutex;
@@ -103,8 +111,6 @@ private:
     /// Wakes flush callers when their requested flush barrier has been completed.
     std::condition_variable flush_cv;
     uint64_t next_flush_id = 0;
-    uint64_t requested_flush_id = 0;
-    uint64_t enqueued_flush_id = 0;
     uint64_t completed_flush_id = 0;
     size_t pending_batch_count = 0;
     size_t dropped_batch_count = 0;

@@ -59,8 +59,6 @@ bool aggregation_worker::start() {
     clear_pending_work_locked();
     reusable_buffers.clear();
     next_flush_id = 0;
-    requested_flush_id = 0;
-    enqueued_flush_id = 0;
     completed_flush_id = 0;
     pending_batch_count = 0;
     dropped_batch_count = 0;
@@ -124,37 +122,44 @@ void aggregation_worker::stop() {
     }
 }
 
-void aggregation_worker::request_flush() {
+void aggregation_worker::request_flush(flush_action_t action, void* action_ctx) {
     std::unique_lock<std::mutex> lock(work_mutex);
-
-    if (!worker_thread_started && worker_finished) {
-        return;
-    }
+    bool execute_inline = false;
 
     const uint64_t flush_id = ++next_flush_id;
-
-    if (producer_finished) {
-        if (pending_work.empty() && worker_finished) {
-            completed_flush_id = flush_id;
-            return;
-        }
-
-        if (flush_id > enqueued_flush_id) {
-            pending_work.push_back({
-                work_item::kind::flush_barrier,
-                {},
-                flush_id
-            });
-            enqueued_flush_id = flush_id;
-            work_cv.notify_one();
-        }
+    if (worker_finished) {
+        completed_flush_id = flush_id;
+        execute_inline = true;
     } else {
-        requested_flush_id = flush_id;
+        work_item barrier{
+            work_item::kind::flush_barrier,
+            {},
+            flush_id,
+            action,
+            action_ctx
+        };
+
+        if (producer_finished) {
+            pending_work.push_back(std::move(barrier));
+            work_cv.notify_one();
+        } else {
+            requested_flushes.push_back(std::move(barrier));
+        }
+
+        flush_cv.wait(lock, [this, flush_id] {
+            return completed_flush_id >= flush_id || worker_finished;
+        });
+
+        if (completed_flush_id < flush_id && worker_finished) {
+            completed_flush_id = flush_id;
+            execute_inline = true;
+        }
     }
 
-    flush_cv.wait(lock, [this, flush_id] {
-        return completed_flush_id >= flush_id || worker_finished;
-    });
+    lock.unlock();
+    if (execute_inline && action) {
+        action(action_ctx);
+    }
 }
 
 void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& active_buffer) {
@@ -205,28 +210,20 @@ void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& activ
 }
 
 void aggregation_worker::service_pending_flush_request(std::vector<stack_trace_t>& active_buffer) {
-    uint64_t flush_id = 0;
-
     {
         std::lock_guard<std::mutex> lock(work_mutex);
-        if (requested_flush_id <= enqueued_flush_id) {
+        if (requested_flushes.empty()) {
             return;
         }
-
-        flush_id = requested_flush_id;
     }
 
     enqueue_active_buffer(active_buffer);
 
     {
         std::lock_guard<std::mutex> lock(work_mutex);
-        if (flush_id > enqueued_flush_id) {
-            pending_work.push_back({
-                work_item::kind::flush_barrier,
-                {},
-                flush_id
-            });
-            enqueued_flush_id = flush_id;
+        while (!requested_flushes.empty()) {
+            pending_work.push_back(std::move(requested_flushes.front()));
+            requested_flushes.pop_front();
         }
     }
 
@@ -239,14 +236,9 @@ void aggregation_worker::finish_producer(std::vector<stack_trace_t>& active_buff
 
     {
         std::lock_guard<std::mutex> lock(work_mutex);
-
-        if (requested_flush_id > enqueued_flush_id) {
-            pending_work.push_back({
-                work_item::kind::flush_barrier,
-                {},
-                requested_flush_id
-            });
-            enqueued_flush_id = requested_flush_id;
+        while (!requested_flushes.empty()) {
+            pending_work.push_back(std::move(requested_flushes.front()));
+            requested_flushes.pop_front();
         }
 
         producer_finished = true;
@@ -303,6 +295,10 @@ void aggregation_worker::worker_main() {
             continue;
         }
 
+        if (item.action) {
+            item.action(item.action_ctx);
+        }
+
         {
             std::lock_guard<std::mutex> lock(work_mutex);
             completed_flush_id = std::max(completed_flush_id, item.flush_id);
@@ -337,6 +333,7 @@ void aggregation_worker::clear_pending_work_locked() {
     }
 
     pending_work.clear();
+    requested_flushes.clear();
     pending_batch_count = 0;
 }
 

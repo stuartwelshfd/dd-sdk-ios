@@ -234,8 +234,8 @@ dd_profile_t* dd_profiler_get_profile(void);
  * @brief Flushes the sampling buffer and retrieves the profile
  *
  * Requests a flush of pending samples, then atomically swaps the internal
- * profile with a fresh empty one. Sampling continues uninterrupted into the
- * new profile.
+ * profile with a fresh empty one in the aggregation stream. Sampling continues
+ * uninterrupted into the new profile.
  *
  * @return Typed handle to profile data, or NULL if:
  *         - Profiling was never started
