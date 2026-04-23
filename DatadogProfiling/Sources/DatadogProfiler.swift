@@ -27,6 +27,13 @@ internal final class DatadogProfiler: ProfilingHandler {
         static let customProfilingCutOffTime: TimeInterval = 60 // 1 minute cutoff
     }
 
+    enum StateUpdateOutcome {
+        case unchanged
+        case started
+        case restartedAfterTimeout
+        case stopped
+    }
+
     static let defaultQueue = DispatchQueue(
         label: "com.datadoghq.datadog-profiler",
         qos: .utility
@@ -275,27 +282,42 @@ private extension DatadogProfiler {
 
     func updateProfilerAndSendProfile() {
         isContinuousProfilingGraceAvailable = false
-        updateProfilerState(canProfile: shouldKeepProfilerRunning())
+        let outcome = updateProfilerState(canProfile: shouldKeepProfilerRunning())
+
+        // A timed-out profile is intentionally discarded, so do not flush again in this cycle.
+        if outcome == .restartedAfterTimeout {
+            return
+        }
+
         sendProfile()
     }
 
-    func updateProfilerState(canProfile: Bool) {
-        switch ProfilingContext.Status.current {
+    @discardableResult
+    func updateProfilerState(canProfile: Bool) -> StateUpdateOutcome {
+        let currentStatus = ProfilingContext.Status.current
+        switch currentStatus {
         case .stopped, .unknown: // When `.unknown` status, mostly profiler NOT_CREATED, it will try to start the profiler
             if canProfile {
+                let outcome: StateUpdateOutcome = currentStatus == .stopped(reason: .timeout)
+                    ? .restartedAfterTimeout
+                    : .started
                 dd_profiler_start()
                 previousCustomProfilingStartDate = dateProvider.now
                 updateProfilingContext()
                 startTimer()
+                return outcome
             }
         case .running:
             if canProfile == false {
                 dd_profiler_stop()
                 updateProfilingContext()
                 stopTimer()
+                return .stopped
             }
         default: break
         }
+
+        return .unchanged
     }
 
     func sendProfile() {
@@ -370,6 +392,10 @@ extension DatadogProfiler {
         lock.lock()
         defer { lock.unlock() }
         return hasActiveInstance
+    }
+
+    func triggerTimerCycleForTesting() {
+        updateProfilerAndSendProfile()
     }
 
     /// Resets the singleton guard (for testing only).

@@ -236,14 +236,21 @@ uint32_t profile::intern_frame(const stack_frame_t& frame, binary_image_cache* i
 
     binary_image_t resolved_image{};
     const binary_image_t* image = &frame.image;
+    bool destroy_resolved_image = false;
 
-    if (frame.image.load_address == 0 && image_cache) {
-        if (image_cache->lookup(frame.instruction_ptr, &resolved_image)) {
+    if (frame.image.load_address == 0) {
+        if (image_cache && image_cache->lookup(frame.instruction_ptr, &resolved_image)) {
             image = &resolved_image;
+        } else if (binary_image_lookup_pc(&resolved_image, reinterpret_cast<void*>(frame.instruction_ptr))) {
+            image = &resolved_image;
+            destroy_resolved_image = true;
         }
     }
 
     uint32_t mapping_id = intern_binary(*image);
+    if (destroy_resolved_image) {
+        binary_image_destroy(&resolved_image);
+    }
 
     location_t location{};
     location.mapping_id = mapping_id;

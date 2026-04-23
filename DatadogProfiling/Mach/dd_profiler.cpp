@@ -210,11 +210,19 @@ public:
         if (!create_profile_and_profiler()) return 0;
         if (status == DD_PROFILER_STATUS_RUNNING) return 1;
 
-        status = DD_PROFILER_STATUS_RUNNING;
-        if (!profiler->start_sampling()) {
-            status = DD_PROFILER_STATUS_ALREADY_STARTED;
+        if (status == DD_PROFILER_STATUS_TIMEOUT) {
+            profiler->stop_sampling();
+            if (!discard_profile()) {
+                return 0;
+            }
         }
 
+        if (!profiler->start_sampling()) {
+            status = DD_PROFILER_STATUS_NOT_STARTED;
+            return 0;
+        }
+
+        status = DD_PROFILER_STATUS_RUNNING;
         return 1;
     }
 
@@ -238,11 +246,23 @@ public:
     /**
      * Flushes the sampling buffer and returns the profile, swapping in a fresh one.
      * The swap runs in the aggregation worker's ordered stream, giving this
-     * flush a deterministic profile boundary.
+     * flush a deterministic profile boundary. Timed-out profiles are discarded
+     * instead of being harvested, because they no longer match the expected
+     * profile window.
      *
      * @return The harvested profile, or nullptr if no profile exists.
      */
     profile* flush_and_get_profile() {
+        if (status == DD_PROFILER_STATUS_TIMEOUT) {
+            if (profiler) {
+                profiler->stop_sampling();
+            }
+            if (!discard_profile()) {
+                return nullptr;
+            }
+            return nullptr;
+        }
+
         profile_swap_context swap_context{
             this,
             new (std::nothrow) dd::profiler::profile(sampling_interval_ns),
@@ -255,10 +275,34 @@ public:
             swap_profile_action(&swap_context);
         }
 
+        if (status == DD_PROFILER_STATUS_TIMEOUT) {
+            if (profiler) {
+                profiler->stop_sampling();
+            }
+            delete swap_context.harvested;
+            swap_context.harvested = nullptr;
+            if (!discard_profile()) {
+                return nullptr;
+            }
+        }
+
         return swap_context.harvested;
     }
 
 private:
+    bool discard_profile() {
+        std::lock_guard<std::mutex> lock(profile_mutex);
+        auto* replacement = new (std::nothrow) dd::profiler::profile(sampling_interval_ns);
+        if (!replacement) {
+            status = DD_PROFILER_STATUS_ALLOCATION_FAILED;
+            return false;
+        }
+
+        delete profile;
+        profile = replacement;
+        return true;
+    }
+
     struct profile_swap_context {
         dd_profiler* profiler;
         dd::profiler::profile* replacement;

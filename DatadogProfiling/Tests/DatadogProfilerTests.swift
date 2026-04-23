@@ -558,6 +558,38 @@ extension DatadogProfilerTests {
         withExtendedLifetime(profiler) {}
     }
 
+    func testUpdateProfilerAndSendProfile_doesNotWriteTimedOutProfileCycle() {
+        // Given
+        let profilingSamplerProvider = profilingSamplerProvider(isContinuousProfiling: true)
+        profilingSamplerProvider.updateWith(
+            deterministicSampler: DeterministicSampler(uuid: .mockRandom(), samplingRate: .maxSampleRate)
+        )
+        let profiler = continuousProfiler(
+            profilingSamplerProvider: profilingSamplerProvider,
+            profilingInterval: 0.05
+        )
+        dd_profiler_start_testing(100, false, 1) // 1ns timeout forces timeout on the next processed batch
+
+        for i in 0..<10_000 {
+            _ = sqrt(Double(i))
+        }
+
+        XCTAssertNil(dd_profiler_flush_and_get_profile(), "Timed-out profile should be discarded before the timer cycle runs")
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_TIMEOUT)
+
+        // When
+        waitForProfileWrite(expectingWrite: false, timeout: 0.15) {
+            profilerQueue.async {
+                profiler.triggerTimerCycleForTesting()
+            }
+            flushQueue()
+        }
+
+        // Then
+        XCTAssertTrue(core.metadata.isEmpty)
+        withExtendedLifetime(profiler) {}
+    }
+
     func testWritesProfile_whenRUMOperationsAccumulated() {
         // Given
         let dateProvider = DateProviderMock()

@@ -54,7 +54,7 @@ final class DDProfilerTests: XCTestCase {
         XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING, "Profiler should start with custom timeout")
     }
 
-    func testDDProfiler_timeoutDrainsQueuedAggregationOnFlush() {
+    func testDDProfiler_timeoutFlush_discardsTimedOutProfile() {
         dd_profiler_start_testing(100, false, 1) // 1ns timeout forces the async stop path quickly
         XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
 
@@ -63,11 +63,7 @@ final class DDProfilerTests: XCTestCase {
         }
 
         let profile = dd_profiler_flush_and_get_profile()
-        XCTAssertNotNil(profile, "Flush should still drain queued samples after timeout-driven stop")
-        if let profile {
-            XCTAssertGreaterThan(dd_pprof_sample_count(profile), 0, "Timed-out profiler should still return the aggregated samples it collected")
-            dd_pprof_destroy(profile)
-        }
+        XCTAssertNil(profile, "Flush should discard timed-out profiles instead of harvesting them")
 
         let timeoutReached = expectation(description: "Profiler reaches timeout")
         DispatchQueue.global().async {
@@ -91,12 +87,7 @@ final class DDProfilerTests: XCTestCase {
             _ = sqrt(Double(i))
         }
 
-        let harvestedProfile = dd_profiler_flush_and_get_profile()
-        XCTAssertNotNil(harvestedProfile, "Flush should force the timeout callback path to process queued samples")
-        if let harvestedProfile {
-            XCTAssertGreaterThan(dd_pprof_sample_count(harvestedProfile), 0, "Harvested profile should contain collected samples before the manual stop")
-            dd_pprof_destroy(harvestedProfile)
-        }
+        XCTAssertNil(dd_profiler_flush_and_get_profile(), "Timed-out samples should be discarded before manual stop")
 
         let timeoutReached = expectation(description: "Profiler reaches timeout")
         DispatchQueue.global().async {
@@ -126,6 +117,89 @@ final class DDProfilerTests: XCTestCase {
 
         XCTAssertEqual(dd_profiler_start(), 1, "Profiler should be able to start again after timeout then manual stop")
         XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING, "Manual stop should complete the full teardown needed for a later restart")
+    }
+
+    func testDDProfiler_startAfterTimeout_completesDeferredTeardownAndRestarts() {
+        dd_profiler_start_testing(100, false, 1) // 1ns timeout forces the callback/request_stop path quickly
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        for i in 0..<10_000 {
+            _ = sqrt(Double(i))
+        }
+
+        XCTAssertNil(dd_profiler_flush_and_get_profile(), "Timed-out samples should be discarded before automatic restart")
+
+        let timeoutReached = expectation(description: "Profiler reaches timeout")
+        DispatchQueue.global().async {
+            for _ in 0..<100 {
+                if dd_profiler_get_status() == DD_PROFILER_STATUS_TIMEOUT {
+                    timeoutReached.fulfill()
+                    return
+                }
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+        }
+
+        wait(for: [timeoutReached], timeout: 1.5)
+
+        XCTAssertEqual(dd_profiler_start(), 1, "Starting after timeout should complete deferred teardown and restart sampling")
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING, "Profiler should be running again after a timeout-driven restart")
+    }
+
+    func testDDProfiler_timeoutRestart_discardsTimedOutProfileBeforeNextFlush() throws {
+        dd_profiler_start_testing(100, false, 1.seconds.dd.toInt64Nanoseconds)
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        let threadGroup = MockThreadGroup()
+        for _ in 0..<100 {
+            threadGroup.createThread {
+                let deadline = Date().addingTimeInterval(2.0)
+                while Date() < deadline {
+                    for i in 0..<500 {
+                        _ = sqrt(Double(i))
+                    }
+                    Thread.sleep(forTimeInterval: 0.002)
+                }
+            }
+        }
+
+        threadGroup.startAll()
+
+        let timeoutReached = expectation(description: "Profiler reaches timeout without an explicit flush")
+        DispatchQueue.global().async {
+            for _ in 0..<400 {
+                if dd_profiler_get_status() == DD_PROFILER_STATUS_TIMEOUT {
+                    timeoutReached.fulfill()
+                    return
+                }
+                Thread.sleep(forTimeInterval: 0.01)
+            }
+        }
+
+        wait(for: [timeoutReached], timeout: 4.5)
+        XCTAssertTrue(threadGroup.waitForAllCompletion(timeout: 3.0), "Worker threads should complete after filling the timeout-triggering batch")
+
+        XCTAssertEqual(dd_profiler_start(), 1, "Restart after timeout should succeed without needing a pre-restart flush")
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        for i in 0..<3_000 {
+            _ = sqrt(Double(i))
+            if i % 50 == 0 {
+                Thread.sleep(forTimeInterval: 0.002)
+            }
+        }
+
+        let restartedProfile = try XCTUnwrap(dd_profiler_flush_and_get_profile())
+        let restartedSampleCount = dd_pprof_sample_count(restartedProfile)
+        dd_pprof_destroy(restartedProfile)
+
+        let nextProfile = try XCTUnwrap(dd_profiler_flush_and_get_profile())
+        let nextSampleCount = dd_pprof_sample_count(nextProfile)
+        dd_pprof_destroy(nextProfile)
+
+        XCTAssertGreaterThan(restartedSampleCount, 0, "Samples collected after restart should still be harvestable")
+        XCTAssertLessThan(nextSampleCount, restartedSampleCount, "A discarded timed-out profile should not come back as a later large flush")
+        XCTAssertLessThan(nextSampleCount, 50, "Only a small amount of newly collected data should be visible on the immediate follow-up flush")
     }
 
     func testDDProfiler_flushHarvestsPartialBatch() {

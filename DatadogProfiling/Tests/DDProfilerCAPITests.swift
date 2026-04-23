@@ -57,6 +57,18 @@ final class DDProfilerCAPITests: XCTestCase {
         dd_profiler_destroy()
     }
 
+    func testProfilerStartTwice_keepsRunningStatus() {
+        XCTAssertEqual(dd_profiler_start(), 1)
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        XCTAssertEqual(dd_profiler_start(), 1)
+
+        XCTAssertEqual(dd_profiler_get_status(), DD_PROFILER_STATUS_RUNNING)
+
+        dd_profiler_stop()
+        dd_profiler_destroy()
+    }
+
     // MARK: - Memory Management Tests
 
     func testProfilerDestroy_stopsRunningProfiler() {

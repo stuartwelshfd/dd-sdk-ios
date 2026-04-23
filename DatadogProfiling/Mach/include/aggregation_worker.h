@@ -54,8 +54,11 @@ public:
 
     /**
      * @brief Enqueues the active sampling buffer, reusing a spare buffer when possible.
+     *
+     * When `allow_drop` is false, this call blocks until there is queue capacity so
+     * flush and shutdown boundaries never discard the very batch they are draining.
      */
-    void enqueue_active_buffer(std::vector<stack_trace_t>& active_buffer);
+    void enqueue_active_buffer(std::vector<stack_trace_t>& active_buffer, bool allow_drop = true);
 
     /**
      * @brief Completes a pending flush request from a producer safe point.
@@ -108,6 +111,8 @@ private:
     std::mutex work_mutex;
     /// Wakes the aggregation thread when new batches or flush barriers are queued.
     std::condition_variable work_cv;
+    /// Wakes producers waiting for batch queue capacity during must-drain flush/shutdown paths.
+    std::condition_variable capacity_cv;
     /// Wakes flush callers when their requested flush barrier has been completed.
     std::condition_variable flush_cv;
     uint64_t next_flush_id = 0;

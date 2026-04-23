@@ -75,6 +75,7 @@ bool aggregation_worker::start() {
     if (result != 0) {
         producer_finished = true;
         worker_finished = true;
+        capacity_cv.notify_all();
         flush_cv.notify_all();
         return false;
     }
@@ -89,6 +90,7 @@ void aggregation_worker::stop() {
         std::lock_guard<std::mutex> lock(work_mutex);
         producer_finished = true;
         work_cv.notify_all();
+        capacity_cv.notify_all();
         flush_cv.notify_all();
         return;
     }
@@ -104,6 +106,7 @@ void aggregation_worker::stop() {
 
         producer_finished = true;
         work_cv.notify_all();
+        capacity_cv.notify_all();
         flush_cv.notify_all();
     }
 
@@ -119,6 +122,7 @@ void aggregation_worker::stop() {
         reusable_buffers.clear();
         worker_finished = true;
         producer_finished = true;
+        capacity_cv.notify_all();
     }
 }
 
@@ -162,7 +166,7 @@ void aggregation_worker::request_flush(flush_action_t action, void* action_ctx) 
     }
 }
 
-void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& active_buffer) {
+void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& active_buffer, bool allow_drop) {
     if (active_buffer.empty()) {
         return;
     }
@@ -170,10 +174,9 @@ void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& activ
     std::vector<stack_trace_t> batch;
     bool needs_reserve = false;
     bool should_drop = false;
-    size_t dropped_count = 0;
 
     {
-        std::lock_guard<std::mutex> lock(work_mutex);
+        std::unique_lock<std::mutex> lock(work_mutex);
 
         batch.swap(active_buffer);
 
@@ -184,9 +187,15 @@ void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& activ
             needs_reserve = true;
         }
 
+        if (!allow_drop) {
+            capacity_cv.wait(lock, [this] {
+                return pending_batch_count < max_pending_batches || worker_finished;
+            });
+        }
+
         if (pending_batch_count >= max_pending_batches) {
             should_drop = true;
-            dropped_count = ++dropped_batch_count;
+            ++dropped_batch_count;
         } else {
             pending_work.push_back({
                 work_item::kind::batch,
@@ -203,6 +212,7 @@ void aggregation_worker::enqueue_active_buffer(std::vector<stack_trace_t>& activ
 
     if (should_drop) {
         destroy_batch(batch);
+        // RUM-14251: Collect telemetry on the number of batches lost.
         return;
     }
 
@@ -217,7 +227,7 @@ void aggregation_worker::service_pending_flush_request(std::vector<stack_trace_t
         }
     }
 
-    enqueue_active_buffer(active_buffer);
+    enqueue_active_buffer(active_buffer, false);
 
     {
         std::lock_guard<std::mutex> lock(work_mutex);
@@ -232,7 +242,7 @@ void aggregation_worker::service_pending_flush_request(std::vector<stack_trace_t
 
 void aggregation_worker::finish_producer(std::vector<stack_trace_t>& active_buffer) {
     service_pending_flush_request(active_buffer);
-    enqueue_active_buffer(active_buffer);
+    enqueue_active_buffer(active_buffer, false);
 
     {
         std::lock_guard<std::mutex> lock(work_mutex);
@@ -271,6 +281,7 @@ void aggregation_worker::worker_main() {
             if (pending_work.empty()) {
                 if (producer_finished) {
                     worker_finished = true;
+                    capacity_cv.notify_all();
                     flush_cv.notify_all();
                     return;
                 }
@@ -282,6 +293,7 @@ void aggregation_worker::worker_main() {
             pending_work.pop_front();
             if (item.item_kind == work_item::kind::batch) {
                 pending_batch_count--;
+                capacity_cv.notify_all();
             }
         }
 
@@ -335,6 +347,7 @@ void aggregation_worker::clear_pending_work_locked() {
     pending_work.clear();
     requested_flushes.clear();
     pending_batch_count = 0;
+    capacity_cv.notify_all();
 }
 
 } // namespace dd::profiler
