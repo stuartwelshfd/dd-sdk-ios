@@ -227,18 +227,62 @@ final class ProfilingHandlerTests: XCTestCase {
         XCTAssertEqual(errorEvent["duration_ns"] as? NSNumber, NSNumber(value: hang.duration))
     }
 
+    func testWrite_capturesOperationBeforeEventWriteContextIsExecuted() throws {
+        // Given
+        XCTAssertEqual(dd_profiler_start(), 1)
+        let profile = try XCTUnwrap(dd_profiler_flush_and_get_profile())
+        let featureScope = FeatureScopeMock(deferEventWriteContext: true)
+        let telemetry = TelemetryMock()
+        let handler = ProfilingHandlerMock(
+            attributes: [:],
+            operation: .customProfiling,
+            featureScope: featureScope,
+            telemetryController: .init(telemetry: telemetry),
+            encoder: JSONEncoder()
+        )
+
+        // When
+        handler.write(profile: profile, rumVitals: [])
+        handler.operation = .continuousProfiling
+        featureScope.flushDeferredEventWriteContexts()
+
+        // Then
+        let event = try XCTUnwrap(featureScope.eventsWritten(ofType: ProfileEvent.self).first)
+        XCTAssertTrue(event.tags.contains("operation:custom"))
+
+        let metricTelemetry = try XCTUnwrap(telemetry.messages.lastMetric(named: ProfilingSessionMetric.Constants.name))
+        let metric = try XCTUnwrap(
+            metricTelemetry.attributes[ProfilingSessionMetric.Constants.sessionKey] as? ProfilingSessionMetric.Attributes
+        )
+        XCTAssertEqual(metric.startReason, ProfilingSessionMetric.StartReason.rumOperation.rawValue)
+    }
+
     private func typedRUMEvents(from metadata: ProfileAttachments) throws -> [[String: Any]] {
         let rumEventsData = try XCTUnwrap(metadata.rumEvents)
         return try XCTUnwrap(JSONSerialization.jsonObject(with: rumEventsData) as? [[String: Any]])
     }
 }
 
-private struct ProfilingHandlerMock: ProfilingHandler {
+private final class ProfilingHandlerMock: ProfilingHandler {
     var attributes: [AttributeKey: AttributeValue]
     var operation: ProfilingOperation
     var featureScope: FeatureScope
     var telemetryController: ProfilingTelemetryController
     var encoder: JSONEncoder
+
+    init(
+        attributes: [AttributeKey: AttributeValue],
+        operation: ProfilingOperation,
+        featureScope: FeatureScope,
+        telemetryController: ProfilingTelemetryController,
+        encoder: JSONEncoder
+    ) {
+        self.attributes = attributes
+        self.operation = operation
+        self.featureScope = featureScope
+        self.telemetryController = telemetryController
+        self.encoder = encoder
+    }
 }
 
 #endif // !os(watchOS)

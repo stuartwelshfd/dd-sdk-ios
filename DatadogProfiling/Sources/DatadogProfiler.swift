@@ -44,7 +44,6 @@ internal final class DatadogProfiler: ProfilingHandler {
     private let minProfileDuration: TimeInterval
     private var timer: DispatchSourceTimer?
 
-    let operation: ProfilingOperation
     let featureScope: FeatureScope
     let telemetryController: ProfilingTelemetryController
     let encoder: JSONEncoder
@@ -63,6 +62,8 @@ internal final class DatadogProfiler: ProfilingHandler {
     private var previousCustomProfilingStartDate: Date
     private var hasConditionsToProfile = true
     private var previousAppState: AppState?
+    // Current profiling mode
+    private(set) var operation: ProfilingOperation
     /// Allows continuous profiling to temporarily run while waiting for the first
     /// RUM-linked sampling decision. The grace is consumed on the first timer cycle
     /// or when the app backgrounds before a decision is received.
@@ -72,7 +73,6 @@ internal final class DatadogProfiler: ProfilingHandler {
         core: DatadogCoreProtocol,
         profilingSamplerProvider: ProfilingSamplerProvider,
         queue: DispatchQueue = DatadogProfiler.defaultQueue,
-        operation: ProfilingOperation = .continuousProfiling,
         telemetryController: ProfilingTelemetryController = .init(),
         profilingConditions: ProfilingConditions = .init(),
         profilingInterval: TimeInterval = Constants.maxProfileDuration,
@@ -92,7 +92,6 @@ internal final class DatadogProfiler: ProfilingHandler {
         self.featureScope = core.scope(for: ProfilerFeature.self)
         self.queue = queue
         self.profilingSamplerProvider = profilingSamplerProvider
-        self.operation = operation
         self.telemetryController = telemetryController
         self.profilingConditions = profilingConditions
         self.profilingInterval = profilingInterval
@@ -100,6 +99,7 @@ internal final class DatadogProfiler: ProfilingHandler {
         self.encoder = encoder
         self.dateProvider = dateProvider
         self.previousCustomProfilingStartDate = dateProvider.now
+        self.operation = profilingSamplerProvider.isContinuousProfilingConfigured ? .continuousProfiling : .customProfiling
         self.isContinuousProfilingGraceAvailable = profilingSamplerProvider.isContinuousProfilingConfigured
 
         if profilingSamplerProvider.isContinuousProfilingConfigured {
@@ -189,6 +189,10 @@ private extension DatadogProfiler {
             hasConditionsToProfile = profilingConditions.canProfileApplication(with: context)
             let currentAppState = context.applicationStateHistory.currentState
             defer { previousAppState = currentAppState }
+
+            if let isContinuousProfiling = profilingSamplerProvider.continuousProfilingSampled {
+                operation = isContinuousProfiling ? .continuousProfiling : .customProfiling
+            }
 
             if currentAppState == .background {
                 // Updates the profiler state if the app was or is about to have foreground time
@@ -301,7 +305,7 @@ private extension DatadogProfiler {
     func sendProfile() {
         previousCustomProfilingStartDate = dateProvider.now
         guard let profile = dd_profiler_flush_and_get_profile() else {
-            telemetryController.send(metric: AppLaunchMetric.noProfile)
+            telemetryController.sendNoProfile(for: operation)
             return
         }
 
@@ -314,6 +318,8 @@ private extension DatadogProfiler {
                 longTasks: longTasks
             )
             cleanUpState()
+        } else {
+            telemetryController.sendProfileNotWritten(for: operation)
         }
     }
 

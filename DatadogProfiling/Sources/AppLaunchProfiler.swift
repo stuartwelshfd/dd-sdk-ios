@@ -63,7 +63,10 @@ extension AppLaunchProfiler: FeatureMessageReceiver {
             return false
         }
 
-        if case let .payload(message as TTIDMessage) = message {
+        if case let .context(context) = message {
+            telemetryController.register(context: context)
+            return false
+        } else if case let .payload(message as TTIDMessage) = message {
             hasProcessedAppLaunch = true
             attributes = message.attributes
 
@@ -77,7 +80,7 @@ extension AppLaunchProfiler: FeatureMessageReceiver {
 
             defer { Self.unregisterInstance() }
             guard let profile = appLaunchProfile() else {
-                telemetryController.send(metric: AppLaunchMetric.noProfile)
+                telemetryController.sendNoProfile(for: operation)
                 return false
             }
 
