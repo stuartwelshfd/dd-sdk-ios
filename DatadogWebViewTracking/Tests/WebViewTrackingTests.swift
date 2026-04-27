@@ -250,7 +250,6 @@ class WebViewTrackingTests: XCTestCase {
         let controller = DDUserContentController()
         config.userContentController = controller
         let webView = WKWebView(frame: .zero, configuration: config)
-        webView.loadSimulatedRequest(URLRequest(url: URL(string: "http://localhost")!), responseHTML: "<html><body>Hello world</body></html>")
 
         try WebViewTracking.enableOrThrow(
             tracking: webView,
@@ -259,6 +258,10 @@ class WebViewTrackingTests: XCTestCase {
             logsSampleRate: 100,
             in: core
         )
+
+        Thread.sleep(forTimeInterval: 1.0)
+
+        webView.loadSimulatedRequest(URLRequest(url: URL(string: "http://localhost")!), responseHTML: "<html><body>Hello world</body></html>")
 
         let ex1 = XCTestExpectation(description: "For sessionUUID1, getIsTraceSampled() should return false")
         let ex2 = XCTestExpectation(description: "For sessionUUID2, getIsTraceSampled() should return true")
@@ -333,7 +336,6 @@ class WebViewTrackingTests: XCTestCase {
         let controller = DDUserContentController()
         config.userContentController = controller
         let webView = WKWebView(frame: .zero, configuration: config)
-        webView.loadSimulatedRequest(URLRequest(url: URL(string: "http://localhost")!), responseHTML: "<html><body>Hello world</body></html>")
 
         try WebViewTracking.enableOrThrow(
             tracking: webView,
@@ -342,6 +344,10 @@ class WebViewTrackingTests: XCTestCase {
             logsSampleRate: 100,
             in: core
         )
+
+        Thread.sleep(forTimeInterval: 1.0)
+
+        webView.loadSimulatedRequest(URLRequest(url: URL(string: "http://localhost")!), responseHTML: "<html><body>Hello world</body></html>")
 
         let ex1 = XCTestExpectation(description: "For active session, getIsTraceSampled() should return false")
         let ex2 = XCTestExpectation(description: "After stopSession, getIsTraceSampled() should return null")
