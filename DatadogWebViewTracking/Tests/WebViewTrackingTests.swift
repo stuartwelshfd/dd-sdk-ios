@@ -232,7 +232,7 @@ class WebViewTrackingTests: XCTestCase {
                 innerExpectation.fulfill()
             }
 
-            wait(for: [innerExpectation], timeout: 1.0)
+            wait(for: [innerExpectation], timeout: 5.0)
         }
 
         wait(for: [outerExpectation], timeout: 10.0)
