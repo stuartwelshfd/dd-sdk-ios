@@ -216,6 +216,28 @@ class WebViewTrackingTests: XCTestCase {
         XCTAssert(boolResult == shouldSample, "\(description) should be\(shouldSample ? "" : " NOT") sampling")
     }
 
+    private func waitUntilJSReturnsNoError(_ js: String, webView: WKWebView) {
+        let outerExpectation = XCTestExpectation()
+
+        var isDone = false
+
+        while !isDone {
+            let innerExpectation = XCTestExpectation()
+
+            webView.evaluateJavaScript("window.DatadogEventBridge.getIsTraceSampled()") { result, error in
+                if error == nil {
+                    isDone = true
+                    outerExpectation.fulfill()
+                }
+                innerExpectation.fulfill()
+            }
+
+            wait(for: [innerExpectation], timeout: 1.0)
+        }
+
+        wait(for: [outerExpectation], timeout: 10.0)
+    }
+
     @available(iOS 15.0, *)
     func testItChangesBridgeDecisionOnSessionRollover() throws {
         // Given
@@ -269,35 +291,35 @@ class WebViewTrackingTests: XCTestCase {
         let ex2 = XCTestExpectation(description: "For sessionUUID2, getIsTraceSampled() should return true")
         let ex3 = XCTestExpectation(description: "For sessionUUID2, getIsTraceSampled() should return true after loading a different page")
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        waitUntilJSReturnsNoError("window.DatadogEventBridge.getIsTraceSampled()", webView: webView)
+
+        webView.evaluateJavaScript("window.DatadogEventBridge.getIsTraceSampled()") { result, error in
+            self.assertJSEvaluateResult(result, error: error, shouldSample: false, description: "sessionUUID1", expectation: ex1)
+        }
+
+        // Start initial session by starting a view
+        RUMMonitor.shared(in: core).startView(key: "view-1")
+        core.flush()
+
+        // When — stop the session and change the UUID for the next one
+        RUMMonitor.shared(in: core).stopSession()
+        core.flush()
+        uuidGenerator.uuid = sessionUUID2
+
+        // Trigger a new session by starting a new view (user interaction after stop)
+        RUMMonitor.shared(in: core).startView(key: "view-2")
+        core.flush()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             webView.evaluateJavaScript("window.DatadogEventBridge.getIsTraceSampled()") { result, error in
-                self.assertJSEvaluateResult(result, error: error, shouldSample: false, description: "sessionUUID1", expectation: ex1)
+                self.assertJSEvaluateResult(result, error: error, shouldSample: true, description: "sessionUUID2", expectation: ex2)
             }
 
-            // Start initial session by starting a view
-            RUMMonitor.shared(in: core).startView(key: "view-1")
-            core.flush()
-
-            // When — stop the session and change the UUID for the next one
-            RUMMonitor.shared(in: core).stopSession()
-            core.flush()
-            uuidGenerator.uuid = sessionUUID2
-
-            // Trigger a new session by starting a new view (user interaction after stop)
-            RUMMonitor.shared(in: core).startView(key: "view-2")
-            core.flush()
+            webView.loadSimulatedRequest(URLRequest(url: URL(string: "http://localhost/about.htmk")!), responseHTML: "<html><body>About us</body></html>")
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 webView.evaluateJavaScript("window.DatadogEventBridge.getIsTraceSampled()") { result, error in
-                    self.assertJSEvaluateResult(result, error: error, shouldSample: true, description: "sessionUUID2", expectation: ex2)
-                }
-
-                webView.loadSimulatedRequest(URLRequest(url: URL(string: "http://localhost/about.htmk")!), responseHTML: "<html><body>About us</body></html>")
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    webView.evaluateJavaScript("window.DatadogEventBridge.getIsTraceSampled()") { result, error in
-                        self.assertJSEvaluateResult(result, error: error, shouldSample: true, description: "sessionUUID2 after loading a new page", expectation: ex3)
-                    }
+                    self.assertJSEvaluateResult(result, error: error, shouldSample: true, description: "sessionUUID2 after loading a new page", expectation: ex3)
                 }
             }
         }
