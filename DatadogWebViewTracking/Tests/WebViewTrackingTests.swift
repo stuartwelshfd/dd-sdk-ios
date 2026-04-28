@@ -49,7 +49,7 @@ class WebViewTrackingTests: XCTestCase {
                 return 'mask'
             },
             getIsTraceSampled() {
-                return null
+                return 'null'
             }
         }
         """)
@@ -110,7 +110,7 @@ class WebViewTrackingTests: XCTestCase {
                 return '\(privacyLevel.rawValue)'
             },
             getIsTraceSampled() {
-                return null
+                return 'null'
             }
         }
         """)
@@ -194,7 +194,7 @@ class WebViewTrackingTests: XCTestCase {
                     return 'mask'
                 },
                 getIsTraceSampled() {
-                    return \(tracingDecision.jsValue)
+                    return '\(tracingDecision.jsValue)'
                 }
             }
             """,
@@ -205,15 +205,16 @@ class WebViewTrackingTests: XCTestCase {
 
     private func assertJSEvaluateResult(_ result: Any?, error: (any Error)?, shouldSample: Bool, description: String, expectation: XCTestExpectation) {
         defer { expectation.fulfill() }
-        guard let boolResult = result as? Bool else {
-            XCTFail("For \(description), expected a boolean result, got \(String(describing: result))")
-            return
-        }
         guard error == nil else {
             XCTFail("For \(description), expected no error but got \(String(describing: error))")
             return
         }
-        XCTAssert(boolResult == shouldSample, "\(description) should be\(shouldSample ? "" : " NOT") sampling")
+        let expected = shouldSample ? "true" : "false"
+        guard let stringResult = result as? String else {
+            XCTFail("For \(description), expected a string result, got \(String(describing: result))")
+            return
+        }
+        XCTAssertEqual(stringResult, expected, "\(description) should be\(shouldSample ? "" : " NOT") sampling")
     }
 
     private func waitUntilJSReturnsNoError(_ js: String, webView: WKWebView) {
@@ -382,7 +383,11 @@ class WebViewTrackingTests: XCTestCase {
                 XCTFail("For \(description), expected no error but got \(String(describing: error))")
                 return
             }
-            XCTAssertTrue(result is NSNull || result == nil, "For \(description), expected null but got \(String(describing: result))")
+            guard let stringResult = result as? String else {
+                XCTFail("For \(description), expected a string result, got \(String(describing: result))")
+                return
+            }
+            XCTAssertEqual(stringResult, "null", "For \(description), expected 'null' but got '\(stringResult)'")
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
