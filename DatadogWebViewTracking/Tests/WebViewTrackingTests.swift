@@ -150,6 +150,8 @@ class WebViewTrackingTests: XCTestCase {
                 )
             )
 
+            defer { try? core.flushAndTearDown() }
+
             RUM.enable(
                 with: .mockWith(applicationID: "test-app-id") {
                     $0.sessionSampleRate = tracingDecision.value.map { $0 ? 100 : 0 } ?? 100
