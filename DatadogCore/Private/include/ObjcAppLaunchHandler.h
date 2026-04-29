@@ -8,12 +8,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void (^UIApplicationDidBecomeActiveCallback) (NSTimeInterval);
+
 /// `AppLaunchHandler` tracks key timestamps in the app launch sequence,
 /// as described in Apple's documentation:
 /// https://developer.apple.com/documentation/uikit/app_and_environment/responding_to_the_launch_of_your_app/about_the_app_launch_sequence
 @interface __dd_private_AppLaunchHandler : NSObject
-
-typedef void (^UIApplicationDidBecomeActiveCallback) (NSTimeInterval);
 
 /// The singleton instance of `AppLaunchHandler`.
 @property (class, readonly) __dd_private_AppLaunchHandler *shared;
