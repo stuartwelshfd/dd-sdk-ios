@@ -8,7 +8,7 @@ import XCTest
 import TestUtilities
 @testable import DatadogCrashReporting
 import DatadogInternal
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogRUM
 
 /// A crash reporter mock with two capabilities:

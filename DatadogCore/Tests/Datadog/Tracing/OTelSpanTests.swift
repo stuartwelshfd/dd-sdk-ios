@@ -9,7 +9,7 @@ import TestUtilities
 import DatadogInternal
 import OpenTelemetryApi
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogTrace
 
 final class OTelSpanTests: XCTestCase {

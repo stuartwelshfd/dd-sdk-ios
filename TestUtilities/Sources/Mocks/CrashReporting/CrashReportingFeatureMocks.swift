@@ -7,10 +7,10 @@
 import Foundation
 import DatadogInternal
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogRUM
 @testable import DatadogCrashReporting
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 extension CrashReportingFeature {
     /// Mocks the Crash Reporting feature instance which doesn't load crash reports.

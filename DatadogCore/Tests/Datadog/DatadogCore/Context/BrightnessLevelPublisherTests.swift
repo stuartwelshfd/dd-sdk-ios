@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 final class BrightnessLevelPublisherTests: XCTestCase {
     private let notificationCenter = MockNotificationCenter()

@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 final class EventGeneratorTests: XCTestCase {
     func testEmpty() throws {

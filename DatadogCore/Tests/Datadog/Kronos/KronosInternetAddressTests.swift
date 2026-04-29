@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class KronosInternetAddressTests: XCTestCase {
     func testIfIPv4AddressIsPrivate() throws {

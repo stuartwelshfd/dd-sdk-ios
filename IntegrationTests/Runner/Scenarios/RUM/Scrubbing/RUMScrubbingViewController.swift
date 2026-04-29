@@ -5,7 +5,7 @@
  */
 
 import UIKit
-import DatadogCore
+import DatadogCoreLegacy
 
 internal class RUMScrubbingViewController: UIViewController {
     override func viewDidLoad() {

@@ -1,8 +1,8 @@
 target 'Runner iOS' do
     platform :ios, '12.0'
 
-    pod 'DatadogCore', :path => '..'
-    pod 'DatadogLogs', :path => '..'
+    pod 'DatadogCoreLegacy', :path => '..'
+    pod 'DatadogLogsLegacy', :path => '..'
     pod 'DatadogTrace', :path => '..'
     pod 'DatadogRUM', :path => '..'
     pod 'DatadogCrashReporting', :path => '..'

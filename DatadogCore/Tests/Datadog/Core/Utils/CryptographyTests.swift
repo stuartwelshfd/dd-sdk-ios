@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class CryptographyTests: XCTestCase {
     func testItComputesSHA256ForArbitraryString() {

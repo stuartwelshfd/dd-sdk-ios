@@ -9,7 +9,7 @@ import TestUtilities
 import DatadogInternal
 
 @testable import DatadogTrace
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DatadogTraceFeatureTests: XCTestCase {
     override func setUp() {

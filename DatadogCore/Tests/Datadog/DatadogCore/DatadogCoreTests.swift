@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 private struct FeatureMock: DatadogRemoteFeature {
     static let name: String = "mock"

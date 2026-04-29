@@ -8,8 +8,8 @@ import XCTest
 import DatadogInternal
 import TestUtilities
 
-@testable import DatadogLogs
-@testable import DatadogCore
+@testable import DatadogLogsLegacy
+@testable import DatadogCoreLegacy
 @testable import DatadogObjc
 
 // swiftlint:disable multiline_arguments_brackets

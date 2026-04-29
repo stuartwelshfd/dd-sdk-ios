@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogRUM
 import DatadogSessionReplay
 

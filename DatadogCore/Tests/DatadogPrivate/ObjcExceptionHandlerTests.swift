@@ -5,7 +5,7 @@
  */
 
 import XCTest
-import DatadogCore
+import DatadogCoreLegacy
 
 class ObjcExceptionHandlerTests: XCTestCase {
     func testGivenNonThrowingCode_itDoesNotThrow() throws {

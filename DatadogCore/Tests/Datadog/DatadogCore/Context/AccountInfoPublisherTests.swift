@@ -7,7 +7,7 @@
 import XCTest
 import DatadogInternal
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class AccountInfoPublisherTests: XCTestCase {
     func testNilInitialValue() throws {

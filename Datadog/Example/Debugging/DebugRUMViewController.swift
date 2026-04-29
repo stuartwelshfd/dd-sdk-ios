@@ -6,7 +6,7 @@
 
 import UIKit
 import DatadogRUM
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogInternal
 
 class DebugRUMViewController: UIViewController {

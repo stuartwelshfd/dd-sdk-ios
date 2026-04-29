@@ -6,7 +6,7 @@
 
 import XCTest
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class ExtensionBackgroundTaskCoordinatorTests: XCTestCase {
     var processInfoSpy: ProcessInfoSpy! // swiftlint:disable:this implicitly_unwrapped_optional

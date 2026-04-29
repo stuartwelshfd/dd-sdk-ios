@@ -4,8 +4,8 @@
 * Copyright 2019-Present Datadog, Inc.
 */
 
-import DatadogCore
-import DatadogLogs
+import DatadogCoreLegacy
+import DatadogLogsLegacy
 import DatadogTrace
 import DatadogCrashReporting
 

@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogInternal
-import DatadogCore
+import DatadogCoreLegacy
 
 @objc
 public class DDSite: NSObject {

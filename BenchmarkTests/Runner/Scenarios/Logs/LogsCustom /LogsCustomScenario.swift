@@ -7,8 +7,8 @@
 import Foundation
 import SwiftUI
 
-import DatadogCore
-import DatadogLogs
+import DatadogCoreLegacy
+import DatadogLogsLegacy
 
 struct LogsCustomScenario: Scenario {
     var initialViewController: UIViewController {

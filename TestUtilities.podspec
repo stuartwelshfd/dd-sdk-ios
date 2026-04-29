@@ -30,9 +30,9 @@ Pod::Spec.new do |s|
     "TestUtilities/Sources/**/*.swift"
   ]
 
-  s.dependency 'DatadogCore'
+  s.dependency 'DatadogCoreLegacy'
   s.dependency 'DatadogInternal'
-  s.dependency 'DatadogLogs'
+  s.dependency 'DatadogLogsLegacy'
   s.dependency 'DatadogRUM'
   s.dependency 'DatadogSessionReplay'
   s.dependency 'DatadogTrace'

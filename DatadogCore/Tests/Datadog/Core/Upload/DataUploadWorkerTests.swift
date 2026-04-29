@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DataUploadWorkerTests: XCTestCase {
     private let uploaderQueue = DispatchQueue(label: "dd-tests-uploader", target: .global(qos: .utility))

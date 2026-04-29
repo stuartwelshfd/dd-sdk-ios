@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DataUploadDelayTests: XCTestCase {
     private let mockPerformance = UploadPerformanceMock(

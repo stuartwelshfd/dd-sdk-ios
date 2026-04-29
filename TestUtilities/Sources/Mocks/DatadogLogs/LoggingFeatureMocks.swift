@@ -7,7 +7,7 @@
 import Foundation
 import DatadogInternal
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 
 extension RemoteLogger.Configuration: AnyMockable {
     public static func mockAny() -> Self { .mockWith() }

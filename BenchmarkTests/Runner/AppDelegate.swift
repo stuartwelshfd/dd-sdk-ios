@@ -7,7 +7,7 @@
 import UIKit
 
 import DatadogInternal
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogBenchmarks
 
 @main

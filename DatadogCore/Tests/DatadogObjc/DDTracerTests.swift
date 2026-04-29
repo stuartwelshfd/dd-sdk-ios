@@ -8,9 +8,9 @@ import XCTest
 import DatadogInternal
 import TestUtilities
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogTrace
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 @testable import DatadogObjc
 
 class DDTracerTests: XCTestCase {

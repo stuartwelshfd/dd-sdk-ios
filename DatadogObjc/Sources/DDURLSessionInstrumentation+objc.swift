@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogInternal
 
 /// Configuration of URLSession instrumentation.

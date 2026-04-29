@@ -11,7 +11,7 @@ import XCTest
 import DatadogInternal
 import TestUtilities
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogRUM
 @testable import DatadogWebViewTracking
 

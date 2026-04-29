@@ -5,8 +5,8 @@
  */
 
 import UIKit
-import DatadogLogs
-import DatadogCore
+import DatadogLogsLegacy
+import DatadogCoreLegacy
 
 class DebugLoggingViewController: UIViewController {
     @IBOutlet weak var logLevelSegmentedControl: UISegmentedControl!

@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class FilesOrchestratorTests: XCTestCase {
     private let performance: PerformancePreset = .mockRandom()

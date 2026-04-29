@@ -9,7 +9,7 @@ import TestUtilities
 import DatadogInternal
 
 @testable import DatadogRUM
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class RUMEventFileOutputTests: XCTestCase {
     lazy var directory = Directory(url: temporaryDirectory)

@@ -6,7 +6,7 @@
 
 import UIKit
 import WebKit
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogWebViewTracking
 import class DatadogInternal.CoreRegistry
 

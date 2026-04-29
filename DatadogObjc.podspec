@@ -21,8 +21,8 @@ Pod::Spec.new do |s|
   s.source = { :git => 'https://github.com/DataDog/dd-sdk-ios.git', :tag => s.version.to_s }
 
   s.source_files = "DatadogObjc/Sources/**/*.swift"
-  s.dependency 'DatadogCore', s.version.to_s
+  s.dependency 'DatadogCoreLegacy', s.version.to_s
   s.dependency 'DatadogRUM', s.version.to_s
-  s.dependency 'DatadogLogs', s.version.to_s
+  s.dependency 'DatadogLogsLegacy', s.version.to_s
   s.dependency 'DatadogTrace', s.version.to_s
 end

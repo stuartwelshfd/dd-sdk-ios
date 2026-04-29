@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class Storage_TLVTests: XCTestCase {
     func testSerializeEventBlock() throws {

@@ -8,7 +8,7 @@ import XCTest
 import Network
 import SystemConfiguration
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class NetworkConnectionInfoPublisherTests: XCTestCase {
     func testNWPathMonitorPublishValue() {

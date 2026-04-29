@@ -7,7 +7,7 @@
 import Foundation
 import UIKit
 import DatadogTrace
-import DatadogCore
+import DatadogCoreLegacy
 import OpenTelemetryApi
 
 struct TraceScenario: Scenario {

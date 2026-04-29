@@ -5,8 +5,8 @@
  */
 
 import UIKit
-import DatadogCore
-import DatadogLogs
+import DatadogCoreLegacy
+import DatadogLogsLegacy
 
 internal class CrashReportingViewController: UIViewController {
     @IBOutlet weak var sendingCrashReportLabel: UILabel!

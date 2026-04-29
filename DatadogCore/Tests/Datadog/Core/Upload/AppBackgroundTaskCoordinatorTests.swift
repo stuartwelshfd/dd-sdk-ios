@@ -6,7 +6,7 @@
 
 import XCTest
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class AppBackgroundTaskCoordinatorTests: XCTestCase {
     var appSpy: AppSpy?

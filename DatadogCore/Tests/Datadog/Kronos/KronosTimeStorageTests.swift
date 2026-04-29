@@ -8,7 +8,7 @@
  */
 
 import XCTest
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class KronosTimeStoragePolicyTests: XCTestCase {
     func testInitWithStringGivesAppGroupType() {

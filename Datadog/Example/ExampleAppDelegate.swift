@@ -5,8 +5,8 @@
 */
 
 import UIKit
-import DatadogCore
-import DatadogLogs
+import DatadogCoreLegacy
+import DatadogLogsLegacy
 import DatadogTrace
 import DatadogRUM
 import DatadogCrashReporting

@@ -8,7 +8,7 @@ import XCTest
 import TestUtilities
 import DatadogRUM
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 @testable import DatadogObjc
 
 /// This tests verify that objc-compatible `DatadogObjc` wrapper properly interacts with`Datadog` public API (swift).

@@ -8,7 +8,7 @@ import XCTest
 import TestUtilities
 import DatadogInternal
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogTrace
 
 class DDSpanTests: XCTestCase {

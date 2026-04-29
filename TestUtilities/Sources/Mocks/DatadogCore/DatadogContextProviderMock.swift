@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 extension DatadogContextProvider: AnyMockable {
     public static func mockAny() -> Self { .mockWith() }

@@ -8,7 +8,7 @@ import XCTest
 import TestUtilities
 import DatadogInternal
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class JSONEncoderTests: XCTestCase {
     private let jsonEncoder = JSONEncoder.dd.default()

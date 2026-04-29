@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 private enum BlockType: UInt16, CaseIterable {
     case one = 0x01

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogTrace
 import DatadogRUM
 

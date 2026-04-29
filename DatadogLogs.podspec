@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  s.name         = "DatadogLogs"
+  s.name         = "DatadogLogsLegacy"
   s.version      = "2.30.0"
   s.summary      = "Datadog Logs Module."
 

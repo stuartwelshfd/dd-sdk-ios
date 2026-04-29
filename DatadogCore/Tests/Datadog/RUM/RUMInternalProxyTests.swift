@@ -10,7 +10,7 @@ import TestUtilities
 import DatadogInternal
 @testable import DatadogRUM
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class RUMInternalProxyTests: XCTestCase {
     private var core: DatadogCoreProxy! // swiftlint:disable:this implicitly_unwrapped_optional

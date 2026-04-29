@@ -8,7 +8,7 @@ import XCTest
 import TestUtilities
 
 @testable import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 @testable import DatadogObjc
 
 class DDInternalLoggerTests: XCTestCase {

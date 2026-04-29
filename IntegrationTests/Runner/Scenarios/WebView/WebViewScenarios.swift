@@ -5,9 +5,9 @@
  */
 
 import UIKit
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogRUM
-import DatadogLogs
+import DatadogLogsLegacy
 import DatadogSessionReplay
 
 private struct WebViewTrackingScenarioPredicate: UIKitRUMViewsPredicate {

@@ -7,9 +7,9 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-import DatadogLogs
+import DatadogLogsLegacy
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 @testable import DatadogCrashReporting
 
 class CrashReporterTests: XCTestCase {

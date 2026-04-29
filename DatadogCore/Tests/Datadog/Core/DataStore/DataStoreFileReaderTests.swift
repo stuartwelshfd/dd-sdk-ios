@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DataStoreFileReaderTests: XCTestCase {
     private var reader: DataStoreFileReader! // swiftlint:disable:this implicitly_unwrapped_optional

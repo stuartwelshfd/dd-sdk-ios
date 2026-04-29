@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class FileTests: XCTestCase {
     private let fileManager = FileManager.default

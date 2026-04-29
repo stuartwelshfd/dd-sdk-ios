@@ -5,7 +5,7 @@
  */
 
 import Foundation
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 public class ContextValuePublisherMock<Value>: ContextValuePublisher {
     private let queue = DispatchQueue(

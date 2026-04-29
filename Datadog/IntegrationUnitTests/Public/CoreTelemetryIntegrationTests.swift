@@ -5,7 +5,7 @@
  */
 
 import XCTest
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogInternal
 @testable import DatadogRUM
 import TestUtilities

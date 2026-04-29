@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DataStoreFileWriterTests: XCTestCase {
     private var writer: DataStoreFileWriter! // swiftlint:disable:this implicitly_unwrapped_optional

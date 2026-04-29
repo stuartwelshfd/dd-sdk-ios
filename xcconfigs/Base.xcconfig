@@ -1,7 +1,7 @@
 // Base configuration file for all targets.
 // Note: all configuration here will be applied to artifacts produced by Carthage.
 
-DD_SWIFT_SDK_PRODUCT_NAME=DatadogCore
+DD_SWIFT_SDK_PRODUCT_NAME=DatadogCoreLegacy
 DD_OBJC_SDK_PRODUCT_NAME=DatadogObjc
 DD_CR_SDK_PRODUCT_NAME=DatadogCrashReporting
 

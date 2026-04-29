@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogInternal
-import DatadogCore
+import DatadogCoreLegacy
 
 /// Application info reads configuration from `Info.plist`.
 ///

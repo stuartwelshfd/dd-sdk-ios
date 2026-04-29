@@ -8,7 +8,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 final class BatteryStatusPublisherTests: XCTestCase {
     private let notificationCenter = NotificationCenter()

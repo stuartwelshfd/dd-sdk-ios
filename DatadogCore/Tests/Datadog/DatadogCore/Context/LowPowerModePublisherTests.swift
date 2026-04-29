@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class LowPowerModePublisherTests: XCTestCase {
     private let notificationCenter = NotificationCenter()

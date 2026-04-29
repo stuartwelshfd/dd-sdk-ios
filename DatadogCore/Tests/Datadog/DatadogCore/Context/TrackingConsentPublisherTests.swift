@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class TrackingConsentPublisherTests: XCTestCase {
     func testInitialValue() throws {

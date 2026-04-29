@@ -8,9 +8,9 @@ import XCTest
 import TestUtilities
 
 @testable import DatadogInternal
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogTrace
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DatadogTests: XCTestCase {
     private var printFunction: PrintFunctionSpy! // swiftlint:disable:this implicitly_unwrapped_optional

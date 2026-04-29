@@ -33,7 +33,7 @@ extension CoreLoggerLevel {
 ///
 /// Usage:
 ///
-///     import DatadogLogs
+///     import DatadogLogsLegacy
 ///
 ///     // Initialise the Logs module
 ///

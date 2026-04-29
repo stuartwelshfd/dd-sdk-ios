@@ -5,7 +5,7 @@
  */
 
 import UIKit
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogTrace
 
 internal class SendTracesFixtureViewController: UIViewController {

@@ -10,8 +10,8 @@ import Foundation
 #if SPM_BUILD
 import DatadogPrivate
 #endif
-@testable import DatadogCore
-@testable import DatadogLogs
+@testable import DatadogCoreLegacy
+@testable import DatadogLogsLegacy
 
 // MARK: - Configuration Mocks
 

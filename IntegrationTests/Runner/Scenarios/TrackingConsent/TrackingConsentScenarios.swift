@@ -7,8 +7,8 @@
 import Foundation
 import DatadogTrace
 import DatadogRUM
-import DatadogLogs
-import DatadogCore
+import DatadogLogsLegacy
+import DatadogCoreLegacy
 
 internal class TrackingConsentBaseScenario {
     func configureFeatures() {

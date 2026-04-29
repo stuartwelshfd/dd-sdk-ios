@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 import XCTest
 
 class CITestIntegrationTests: XCTestCase {

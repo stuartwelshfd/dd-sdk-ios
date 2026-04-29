@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 import DatadogInternal
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 
 class LogEventBuilderTests: XCTestCase {
     func testItBuildsLogEventWithLogInformation() throws {

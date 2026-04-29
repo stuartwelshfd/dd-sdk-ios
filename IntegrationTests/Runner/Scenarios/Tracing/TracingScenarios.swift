@@ -4,9 +4,9 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogTrace
-import DatadogLogs
+import DatadogLogsLegacy
 
 /// Scenario which starts a view controller that sends bunch of spans using manual API of `Tracer`.
 /// It also uses the `span.log()` to send logs.

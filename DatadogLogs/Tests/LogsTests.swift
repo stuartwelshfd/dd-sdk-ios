@@ -8,7 +8,7 @@ import XCTest
 import DatadogInternal
 import TestUtilities
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 
 class LogsTests: XCTestCase {
     func testDefaultConfiguration() {

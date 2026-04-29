@@ -8,8 +8,8 @@ import XCTest
 import DatadogInternal
 
 @testable import DatadogTrace
-@testable import DatadogLogs
-@testable import DatadogCore
+@testable import DatadogLogsLegacy
+@testable import DatadogCoreLegacy
 @testable import DatadogRUM
 @testable import TestUtilities
 

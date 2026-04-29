@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DataStore_TLVTests: XCTestCase {
     /// The Length bytes for tested block.

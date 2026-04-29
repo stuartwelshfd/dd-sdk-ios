@@ -6,7 +6,7 @@
 
 import SwiftUI
 
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogRUM
 
 struct RUMManualScenario: Scenario {

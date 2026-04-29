@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-import DatadogCore
+import DatadogCoreLegacy
 import DatadogTrace
 
 struct TraceScenario: Scenario {

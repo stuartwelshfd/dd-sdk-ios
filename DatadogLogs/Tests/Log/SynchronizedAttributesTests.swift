@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 
 final class SynchronizedAttributesTests: XCTestCase {
     func testAddAttribute() {

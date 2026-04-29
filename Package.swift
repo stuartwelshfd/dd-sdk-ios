@@ -33,16 +33,16 @@ let package = Package(
     platforms: platforms,
     products: [
         .library(
-            name: "DatadogCore",
-            targets: ["DatadogCore"]
+            name: "DatadogCoreLegacy",
+            targets: ["DatadogCoreLegacy"]
         ),
         .library(
             name: "DatadogObjc",
             targets: ["DatadogObjc"]
         ),
         .library(
-            name: "DatadogLogs",
-            targets: ["DatadogLogs"]
+            name: "DatadogLogsLegacy",
+            targets: ["DatadogLogsLegacy"]
         ),
         .library(
             name: "DatadogTrace",
@@ -71,7 +71,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "DatadogCore",
+            name: "DatadogCoreLegacy",
             dependencies: [
                 .target(name: "DatadogInternal"),
                 .target(name: "DatadogPrivate"),
@@ -86,8 +86,8 @@ let package = Package(
         .target(
             name: "DatadogObjc",
             dependencies: [
-                .target(name: "DatadogCore"),
-                .target(name: "DatadogLogs"),
+                .target(name: "DatadogCoreLegacy"),
+                .target(name: "DatadogLogsLegacy"),
                 .target(name: "DatadogTrace"),
                 .target(name: "DatadogRUM"),
             ],
@@ -113,7 +113,7 @@ let package = Package(
         ),
 
         .target(
-            name: "DatadogLogs",
+            name: "DatadogLogsLegacy",
             dependencies: [
                 .target(name: "DatadogInternal"),
             ],
@@ -122,7 +122,7 @@ let package = Package(
         .testTarget(
             name: "DatadogLogsTests",
             dependencies: [
-                .target(name: "DatadogLogs"),
+                .target(name: "DatadogLogsLegacy"),
                 .target(name: "TestUtilities"),
             ],
             path: "DatadogLogs/Tests"
@@ -222,10 +222,10 @@ let package = Package(
         .target(
             name: "TestUtilities",
             dependencies: [
-                .target(name: "DatadogCore"),
+                .target(name: "DatadogCoreLegacy"),
                 .target(name: "DatadogPrivate"),
                 .target(name: "DatadogInternal"),
-                .target(name: "DatadogLogs"),
+                .target(name: "DatadogLogsLegacy"),
                 .target(name: "DatadogRUM"),
                 .target(name: "DatadogSessionReplay"),
                 .target(name: "DatadogTrace"),

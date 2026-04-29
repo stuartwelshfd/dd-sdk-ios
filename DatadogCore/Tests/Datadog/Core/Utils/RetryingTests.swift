@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 private class OperationMock {
     private let succeedingCallResults: [Result<Int, Error>]

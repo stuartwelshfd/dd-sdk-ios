@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 @testable import DatadogInternal
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class LocaleInfoPublisherTests: XCTestCase {
     private let notificationCenter = NotificationCenter()

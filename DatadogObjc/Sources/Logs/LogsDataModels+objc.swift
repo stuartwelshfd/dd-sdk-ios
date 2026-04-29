@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogLogs
+import DatadogLogsLegacy
 import DatadogInternal
 
 @objc

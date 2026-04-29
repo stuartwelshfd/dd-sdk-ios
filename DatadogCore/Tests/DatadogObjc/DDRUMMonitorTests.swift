@@ -8,7 +8,7 @@ import XCTest
 import TestUtilities
 import DatadogInternal
 @testable import DatadogRUM
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 @testable import DatadogObjc
 
 class UIKitRUMViewsPredicateBridgeTests: XCTestCase {

@@ -8,10 +8,10 @@ import XCTest
 import DatadogInternal
 import OpenTelemetryApi
 
-@testable import DatadogLogs
+@testable import DatadogLogsLegacy
 @testable import DatadogTrace
 @testable import DatadogRUM
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 @testable import TestUtilities
 
 // swiftlint:disable multiline_arguments_brackets

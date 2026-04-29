@@ -5,7 +5,7 @@
  */
 
 import Foundation
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 public class KronosClockMock: KronosClockProtocol {
     public typealias FirstCompletion = (Date, TimeInterval) -> Void

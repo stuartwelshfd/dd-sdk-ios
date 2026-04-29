@@ -7,7 +7,7 @@
 import XCTest
 import DatadogInternal
 import TestUtilities
-@testable import DatadogCore
+@testable import DatadogCoreLegacy
 
 class DataUploaderTests: XCTestCase {
     // swiftlint:disable opening_brace
