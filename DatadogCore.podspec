@@ -24,6 +24,10 @@ Pod::Spec.new do |s|
   s.source_files = ["DatadogCore/Sources/**/*.swift",
                     "DatadogCore/Private/**/*.{h,m}"]
 
+  s.pod_target_xcconfig = {
+    'HEADER_SEARCH_PATHS' => '"${PODS_TARGET_SRCROOT}/DatadogCore/Private/include"'
+  }
+
   s.resource_bundle = {
     "DatadogCore" => "DatadogCore/Resources/PrivacyInfo.xcprivacy"
   }
