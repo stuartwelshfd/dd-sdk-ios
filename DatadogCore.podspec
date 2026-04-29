@@ -24,6 +24,8 @@ Pod::Spec.new do |s|
   s.source_files = ["DatadogCore/Sources/**/*.swift",
                     "DatadogCore/Private/**/*.{h,m}"]
 
+  s.private_header_files = "DatadogCore/Private/**/*.h"
+
   s.pod_target_xcconfig = {
     'HEADER_SEARCH_PATHS' => '"${PODS_TARGET_SRCROOT}/DatadogCore/Private/include"'
   }
