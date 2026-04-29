@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogRUM
-import DatadogInternal
+import DatadogInternalLegacy
 
 // MARK: - SwiftUI Views Predicate Bridge
 

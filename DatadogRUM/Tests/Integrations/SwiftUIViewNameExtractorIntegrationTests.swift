@@ -7,7 +7,7 @@
 import XCTest
 import SwiftUI
 @testable import DatadogRUM
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 @available(iOS 13.0, tvOS 13.0, *)
 class SwiftUIViewNameExtractorIntegrationTests: XCTestCase {

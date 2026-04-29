@@ -9,7 +9,7 @@
 import XCTest
 import WebKit
 import TestUtilities
-import DatadogInternal
+import DatadogInternalLegacy
 @testable import DatadogWebViewTracking
 
 class WebViewTrackingTests: XCTestCase {
@@ -51,9 +51,9 @@ class WebViewTrackingTests: XCTestCase {
         struct SessionReplayFeature: DatadogFeature, SessionReplayConfiguration {
             static let name = "session-replay"
             let messageReceiver: FeatureMessageReceiver = NOPFeatureMessageReceiver()
-            let textAndInputPrivacyLevel: DatadogInternal.TextAndInputPrivacyLevel
-            let imagePrivacyLevel: DatadogInternal.ImagePrivacyLevel
-            let touchPrivacyLevel: DatadogInternal.TouchPrivacyLevel
+            let textAndInputPrivacyLevel: DatadogInternalLegacy.TextAndInputPrivacyLevel
+            let imagePrivacyLevel: DatadogInternalLegacy.ImagePrivacyLevel
+            let touchPrivacyLevel: DatadogInternalLegacy.TouchPrivacyLevel
         }
 
         let mockSanitizer = HostsSanitizerMock()

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 public extension Array where Element == FeatureMessage {
     /// Unpacks the first "payload message" in this array.

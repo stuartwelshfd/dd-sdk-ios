@@ -5,11 +5,11 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import DatadogBenchmarks
 import OpenTelemetryApi
 
-internal final class Meter: DatadogInternal.BenchmarkMeter {
+internal final class Meter: DatadogInternalLegacy.BenchmarkMeter {
     let meter: OpenTelemetryApi.Meter
 
     init(provider: MeterProvider) {
@@ -19,32 +19,32 @@ internal final class Meter: DatadogInternal.BenchmarkMeter {
         )
     }
 
-    func counter(metric: @autoclosure () -> String) -> DatadogInternal.BenchmarkCounter {
+    func counter(metric: @autoclosure () -> String) -> DatadogInternalLegacy.BenchmarkCounter {
         meter.createDoubleCounter(name: metric())
     }
 
-    func gauge(metric: @autoclosure () -> String) -> DatadogInternal.BenchmarkGauge {
+    func gauge(metric: @autoclosure () -> String) -> DatadogInternalLegacy.BenchmarkGauge {
         meter.createDoubleMeasure(name: metric())
     }
 
-    func observe(metric: @autoclosure () -> String, callback: @escaping (any DatadogInternal.BenchmarkGauge) -> Void) {
+    func observe(metric: @autoclosure () -> String, callback: @escaping (any DatadogInternalLegacy.BenchmarkGauge) -> Void) {
         _ = meter.createDoubleObserver(name: metric()) { callback(DoubleObserverWrapper(observer: $0)) }
     }
 }
 
-extension AnyCounterMetric<Double>: DatadogInternal.BenchmarkCounter {
+extension AnyCounterMetric<Double>: DatadogInternalLegacy.BenchmarkCounter {
     public func add(value: Double, attributes: @autoclosure () -> [String: String]) {
         add(value: value, labelset: LabelSet(labels: attributes()))
     }
 }
 
-extension AnyMeasureMetric<Double>: DatadogInternal.BenchmarkGauge {
+extension AnyMeasureMetric<Double>: DatadogInternalLegacy.BenchmarkGauge {
     public func record(value: Double, attributes: @autoclosure () -> [String: String]) {
         record(value: value, labelset: LabelSet(labels: attributes()))
     }
 }
 
-private struct DoubleObserverWrapper: DatadogInternal.BenchmarkGauge {
+private struct DoubleObserverWrapper: DatadogInternalLegacy.BenchmarkGauge {
     let observer: DoubleObserverMetric
 
     func record(value: Double, attributes: @autoclosure () -> [String: String]) {

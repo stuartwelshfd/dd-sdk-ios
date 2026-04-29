@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Errors that can be thrown when parsing a WebView message
 internal enum WebViewMessageError: Error, Equatable {

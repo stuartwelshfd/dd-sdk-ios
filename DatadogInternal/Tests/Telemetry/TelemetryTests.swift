@@ -7,7 +7,7 @@
 import XCTest
 import Foundation
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class TelemetryTests: XCTestCase {
     private let telemetry = TelemetryMock()

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal class RUMResourceScope: RUMScope {
     // MARK: - Initialization

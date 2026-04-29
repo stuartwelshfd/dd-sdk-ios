@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import UIKit
 
 internal final class RUMFeature: DatadogRemoteFeature {

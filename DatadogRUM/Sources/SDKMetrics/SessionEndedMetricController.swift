@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// A controller responsible for managing "RUM Session Ended" metrics.
 internal final class SessionEndedMetricController {

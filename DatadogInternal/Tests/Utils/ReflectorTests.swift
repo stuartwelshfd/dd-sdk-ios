@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class ReflectorTests: XCTestCase {
     func testReflectObject() throws {
@@ -81,7 +81,7 @@ class ReflectorTests: XCTestCase {
         XCTAssertEqual(echo.bar.count, 10)
         XCTAssertEqual(
             telemetry.messages.firstError()?.message,
-            #"notFound(DatadogInternal.Reflector.Error.Context(subjectType: Swift.String, paths: [DatadogInternal.ReflectionMirror.Path.key("baz")]))"#
+            #"notFound(DatadogInternalLegacy.Reflector.Error.Context(subjectType: Swift.String, paths: [DatadogInternalLegacy.ReflectionMirror.Path.key("baz")]))"#
         )
     }
 
@@ -133,7 +133,7 @@ class ReflectorTests: XCTestCase {
         XCTAssertEqual(echo.bar.count, 10)
         XCTAssertEqual(
             telemetry.messages.firstError()?.message,
-            #"notFound(DatadogInternal.Reflector.Error.Context(subjectType: Swift.String, paths: [DatadogInternal.ReflectionMirror.Path.key("baz")]))"#
+            #"notFound(DatadogInternalLegacy.Reflector.Error.Context(subjectType: Swift.String, paths: [DatadogInternalLegacy.ReflectionMirror.Path.key("baz")]))"#
         )
     }
 

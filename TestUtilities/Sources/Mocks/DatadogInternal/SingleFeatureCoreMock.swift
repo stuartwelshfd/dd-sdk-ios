@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Single-Feature core mock is a `PassthroughCoreMock` with the ability to register
 /// a single Feature instance.

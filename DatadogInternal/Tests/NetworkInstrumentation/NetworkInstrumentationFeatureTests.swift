@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class NetworkInstrumentationFeatureTests: XCTestCase {
     // swiftlint:disable implicitly_unwrapped_optional

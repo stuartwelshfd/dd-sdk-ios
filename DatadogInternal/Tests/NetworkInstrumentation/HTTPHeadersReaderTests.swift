@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class HTTPHeadersReaderTests: XCTestCase {
     func testReadingSampledTraceContext() {

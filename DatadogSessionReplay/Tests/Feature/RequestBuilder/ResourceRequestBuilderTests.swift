@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 @testable import DatadogSessionReplay
 @testable import TestUtilities
 

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// The rule for handling RUM events which are tracked while there is no active view.
 ///

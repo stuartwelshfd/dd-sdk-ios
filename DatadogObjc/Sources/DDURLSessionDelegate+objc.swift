@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogCoreLegacy
-import DatadogInternal
+import DatadogInternalLegacy
 
 @objc
 @available(*, deprecated, message: "Use `URLSessionInstrumentation.enable(with:)` instead.")

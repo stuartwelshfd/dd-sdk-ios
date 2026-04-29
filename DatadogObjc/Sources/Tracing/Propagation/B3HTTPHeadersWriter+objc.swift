@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import class DatadogInternal.B3HTTPHeadersWriter
+import class DatadogInternalLegacy.B3HTTPHeadersWriter
 
 @objc
 public enum DDInjectEncoding: Int {

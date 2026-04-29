@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import DatadogCoreLegacy
 
 @objc
@@ -19,7 +19,7 @@ public class DDInternalLogger: NSObject {
         case .error: .error
         case .critical: .critical
         }
-        DatadogInternal.consolePrint(message, coreLoggerLevel)
+        DatadogInternalLegacy.consolePrint(message, coreLoggerLevel)
     }
 
     @objc

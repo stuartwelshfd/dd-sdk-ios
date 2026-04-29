@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal extension FeatureScope {
     /// Data store endpoint suited for RUM data.

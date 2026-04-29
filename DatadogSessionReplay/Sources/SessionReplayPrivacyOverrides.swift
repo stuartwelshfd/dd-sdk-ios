@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 // MARK: - Associated Keys
 

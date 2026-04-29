@@ -5,12 +5,12 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Available strategies for sampling trace propagation headers.
 @objc
 public class DDTraceSamplingStrategy: NSObject {
-    internal let swiftType: DatadogInternal.TraceSamplingStrategy
+    internal let swiftType: DatadogInternalLegacy.TraceSamplingStrategy
 
     /// Trace propagation headers will be sampled same as propagated span.
     ///
@@ -31,7 +31,7 @@ public class DDTraceSamplingStrategy: NSObject {
         return DDTraceSamplingStrategy(swiftType: .custom(sampleRate: sampleRate))
     }
 
-    private init(swiftType: DatadogInternal.TraceSamplingStrategy) {
+    private init(swiftType: DatadogInternalLegacy.TraceSamplingStrategy) {
         self.swiftType = swiftType
     }
 }

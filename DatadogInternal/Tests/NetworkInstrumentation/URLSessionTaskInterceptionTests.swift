@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class URLSessionTaskInterceptionTests: XCTestCase {
     func testWhenInterceptionIsCreated_itHasUniqueIdentifier() {

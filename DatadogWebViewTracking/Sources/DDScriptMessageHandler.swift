@@ -8,7 +8,7 @@
 
 import Foundation
 import WebKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal class DDScriptMessageHandler: NSObject, WKScriptMessageHandler {
     static let name = "DatadogEventBridge"

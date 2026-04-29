@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import class DatadogInternal.HTTPHeadersWriter
+import class DatadogInternalLegacy.HTTPHeadersWriter
 
 @objc
 public class DDHTTPHeadersWriter: NSObject {

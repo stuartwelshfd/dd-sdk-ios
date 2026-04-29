@@ -5,7 +5,7 @@
  */
 
 import Foundation
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 extension DatadogContext: AnyMockable, RandomMockable {
     public static func mockAny() -> DatadogContext { mockWith() }

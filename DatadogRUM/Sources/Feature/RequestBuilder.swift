@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// The RUM URL Request Builder for formatting and configuring the `URLRequest`
 /// to upload RUM data.

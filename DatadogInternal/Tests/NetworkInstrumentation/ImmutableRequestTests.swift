@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-import DatadogInternal
+import DatadogInternalLegacy
 
 class ImmutableRequestTests: XCTestCase {
     func testReadingURL() {

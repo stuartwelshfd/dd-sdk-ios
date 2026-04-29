@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import DatadogCoreLegacy
 
 /// Test info reads configuration from `Info.plist`.

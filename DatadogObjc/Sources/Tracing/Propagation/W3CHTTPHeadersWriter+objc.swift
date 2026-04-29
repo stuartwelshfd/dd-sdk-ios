@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import class DatadogInternal.W3CHTTPHeadersWriter
+import class DatadogInternalLegacy.W3CHTTPHeadersWriter
 
 @objc
 public class DDW3CHTTPHeadersWriter: NSObject {

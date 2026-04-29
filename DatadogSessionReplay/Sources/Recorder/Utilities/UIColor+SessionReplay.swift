@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 extension UIColor: DatadogExtended {}
 

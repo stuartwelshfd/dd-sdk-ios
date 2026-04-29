@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class ReflectionMirrorTests: XCTestCase {
     func testClassDisplay() {

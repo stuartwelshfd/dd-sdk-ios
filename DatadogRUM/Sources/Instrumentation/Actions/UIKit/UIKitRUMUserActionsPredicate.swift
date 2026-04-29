@@ -5,7 +5,7 @@
  */
 
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 #if os(tvOS)
 public typealias UIKitRUMActionsPredicate = UIPressRUMActionsPredicate

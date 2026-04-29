@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Simple `DateProvider` mock that returns given date.
 public final class DateProviderMock: DateProvider {

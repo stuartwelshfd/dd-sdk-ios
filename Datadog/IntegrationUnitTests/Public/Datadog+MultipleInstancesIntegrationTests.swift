@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 @testable import DatadogCoreLegacy
-import DatadogInternal
+import DatadogInternalLegacy
 import DatadogLogsLegacy
 
 class Datadog_MultipleInstancesIntegrationTests: XCTestCase {

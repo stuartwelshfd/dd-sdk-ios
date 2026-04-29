@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// `FeatureMessageReceiver` that records received telemetry events.
 public class TelemetryReceiverMock: FeatureMessageReceiver {

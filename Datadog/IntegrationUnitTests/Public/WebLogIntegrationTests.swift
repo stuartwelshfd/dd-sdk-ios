@@ -8,7 +8,7 @@ import XCTest
 
 #if !os(tvOS)
 
-import DatadogInternal
+import DatadogInternalLegacy
 import TestUtilities
 
 @testable import DatadogLogsLegacy

@@ -5,7 +5,7 @@
 */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import OpenTelemetryApi
 
 /// The Datadog implementation of OpenTelemetry `TracerProvider`.

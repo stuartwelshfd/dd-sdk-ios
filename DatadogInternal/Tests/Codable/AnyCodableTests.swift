@@ -26,7 +26,7 @@
 import XCTest
 import TestUtilities
 
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class AnyCodableTests: XCTestCase {
     struct SomeCodable: Codable {

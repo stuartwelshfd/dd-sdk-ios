@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-import DatadogInternal
+import DatadogInternalLegacy
 @testable import DatadogObjc
 
 final class DDURLSessionInstrumentationConfigurationTests: XCTestCase {

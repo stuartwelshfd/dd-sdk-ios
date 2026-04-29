@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 extension RUMConnectivity {
     init?(context: DatadogContext) {

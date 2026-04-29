@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// A type managing Session Replay recording.
 internal protocol Recording {

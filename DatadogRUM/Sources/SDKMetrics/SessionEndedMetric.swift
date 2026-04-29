@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal enum SessionEndedMetricError: Error, CustomStringConvertible {
     /// Indicates an attempt of tracking view event in session that shouldn't belong to.

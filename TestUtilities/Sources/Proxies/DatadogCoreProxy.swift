@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 @testable import DatadogCoreLegacy
 
 /// A `DatadogCoreProtocol` which proxies all calls to the real `DatadogCore` implementation. It intercepts

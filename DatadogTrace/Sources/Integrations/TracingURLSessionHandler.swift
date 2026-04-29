@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal struct TracingURLSessionHandler: DatadogURLSessionHandler {
     /// Integration with Core Context.
@@ -33,7 +33,7 @@ internal struct TracingURLSessionHandler: DatadogURLSessionHandler {
         self.traceContextInjection = traceContextInjection
     }
 
-    func modify(request: URLRequest, headerTypes: Set<DatadogInternal.TracingHeaderType>, networkContext: NetworkContext?) -> (URLRequest, TraceContext?) {
+    func modify(request: URLRequest, headerTypes: Set<DatadogInternalLegacy.TracingHeaderType>, networkContext: NetworkContext?) -> (URLRequest, TraceContext?) {
         guard let tracer = tracer else {
             return (request, nil)
         }
@@ -95,11 +95,11 @@ internal struct TracingURLSessionHandler: DatadogURLSessionHandler {
         return (request, hasSetAnyHeader ? injectedSpanContext : nil)
     }
 
-    func interceptionDidStart(interception: DatadogInternal.URLSessionTaskInterception) {
+    func interceptionDidStart(interception: DatadogInternalLegacy.URLSessionTaskInterception) {
         // no-op
     }
 
-    func interceptionDidComplete(interception: DatadogInternal.URLSessionTaskInterception) {
+    func interceptionDidComplete(interception: DatadogInternalLegacy.URLSessionTaskInterception) {
         guard
             interception.isFirstPartyRequest, // `Span` should be only send for 1st party requests
             interception.origin != "rum", // if that request was tracked as RUM resource, the RUM backend will create the span on our behalf

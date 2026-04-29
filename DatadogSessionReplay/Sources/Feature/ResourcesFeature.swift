@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal class ResourcesFeature: DatadogRemoteFeature {
     static var name = "session-replay-resources"

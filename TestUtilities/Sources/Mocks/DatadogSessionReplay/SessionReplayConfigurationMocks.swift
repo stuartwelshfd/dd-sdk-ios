@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 extension SessionReplayPrivacyLevel: AnyMockable, RandomMockable {
     public static func mockAny() -> Self {

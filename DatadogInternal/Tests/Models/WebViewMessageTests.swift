@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class WebViewMessageTests: XCTestCase {
     let decoder = JSONDecoder()

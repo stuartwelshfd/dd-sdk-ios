@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class DatadogCoreProtocolTests: XCTestCase {
     func testSendMessageExtension() {

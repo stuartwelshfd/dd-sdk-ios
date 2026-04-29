@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// An object for sending crash reports.
 internal protocol CrashReportSender {
@@ -60,7 +60,7 @@ internal struct MessageBusSender: CrashReportSender {
     ///
     /// - Parameters:
     ///   - launch: The launch report.
-    func send(launch: DatadogInternal.LaunchReport) {
+    func send(launch: DatadogInternalLegacy.LaunchReport) {
         core?.set(context: launch)
     }
 }

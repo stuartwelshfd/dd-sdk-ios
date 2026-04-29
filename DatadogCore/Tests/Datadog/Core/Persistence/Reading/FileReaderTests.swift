@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-import DatadogInternal
+import DatadogInternalLegacy
 @testable import DatadogCoreLegacy
 
 class FileReaderTests: XCTestCase {

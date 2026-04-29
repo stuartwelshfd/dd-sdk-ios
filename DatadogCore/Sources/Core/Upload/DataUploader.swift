@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import CommonCrypto
 
 /// A type that performs data uploads.

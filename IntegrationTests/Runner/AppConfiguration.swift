@@ -11,7 +11,7 @@ import DatadogTrace
 import DatadogRUM
 import DatadogCrashReporting
 
-@_exported import class DatadogInternal.DDURLSessionDelegate
+@_exported import class DatadogInternalLegacy.DDURLSessionDelegate
 
 var logger: LoggerProtocol?
 var rumMonitor: RUMMonitorProtocol { RUMMonitor.shared() }

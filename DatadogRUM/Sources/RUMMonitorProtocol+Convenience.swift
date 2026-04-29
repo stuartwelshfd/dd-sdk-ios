@@ -6,7 +6,7 @@
 
 import UIKit
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 // swiftlint:disable function_default_parameter_at_end
 

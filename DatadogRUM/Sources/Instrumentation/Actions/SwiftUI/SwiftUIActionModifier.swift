@@ -6,7 +6,7 @@
 
 #if canImport(SwiftUI)
 import SwiftUI
-import DatadogInternal
+import DatadogInternalLegacy
 
 #if !os(tvOS)
 

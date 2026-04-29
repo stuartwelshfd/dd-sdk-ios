@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Event generator that generates events from the given data blocks.
 internal struct EventGenerator: Sequence, IteratorProtocol {

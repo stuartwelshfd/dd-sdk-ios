@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Enable iOS Crash Reporting and Error Tracking to get comprehensive crash reports and
 /// error trends with Real User Monitoring. With this feature, you can access:

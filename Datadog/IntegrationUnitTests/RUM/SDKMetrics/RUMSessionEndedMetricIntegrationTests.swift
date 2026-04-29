@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 @testable import DatadogRUM
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class RUMSessionEndedMetricIntegrationTests: XCTestCase {
     private let dateProvider = DateProviderMock()

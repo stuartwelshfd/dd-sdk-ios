@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogCoreLegacy
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Configuration of URLSession instrumentation.
 @objc

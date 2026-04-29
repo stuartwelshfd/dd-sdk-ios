@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Sanitizes `Log` representation received from the user, so it can match Datadog log constraints.
 internal struct LogEventSanitizer {

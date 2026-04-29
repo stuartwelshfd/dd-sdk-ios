@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogInternal
+import DatadogInternalLegacy
 import Foundation
 
 /// Core mock that only allows registering and retrieving features.
@@ -55,7 +55,7 @@ public class FeatureRegistrationCoreMock: DatadogCoreProtocol {
         // not supported - use different type of core mock if you need this
     }
 
-    public func send(message: DatadogInternal.FeatureMessage, else fallback: @escaping () -> Void) {
+    public func send(message: DatadogInternalLegacy.FeatureMessage, else fallback: @escaping () -> Void) {
         // not supported - use different type of core mock if you need this
     }
 

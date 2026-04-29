@@ -6,7 +6,7 @@
 
 import XCTest
 
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class URLSessionTaskSwizzlerTests: XCTestCase {
     func testSwizzling_taskResume() throws {

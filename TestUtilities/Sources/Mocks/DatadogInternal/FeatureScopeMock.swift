@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 public final class FeatureScopeMock: FeatureScope, @unchecked Sendable {
     private struct EventWriterMock: Writer {

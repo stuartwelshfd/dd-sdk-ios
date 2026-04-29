@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Publishes the current `AccountInfo` value to receiver.
 internal final class AccountInfoPublisher: ContextValuePublisher {

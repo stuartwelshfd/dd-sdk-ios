@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogInternal
+import DatadogInternalLegacy
 import TestUtilities
 import XCTest
 

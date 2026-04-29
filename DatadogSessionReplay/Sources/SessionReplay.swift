@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// An entry point to Datadog Session Replay feature.
 public enum SessionReplay {

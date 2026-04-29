@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Reports Watchdog Termination events to Datadog.
 internal protocol WatchdogTerminationReporting {

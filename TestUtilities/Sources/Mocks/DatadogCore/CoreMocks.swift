@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogInternal
+import DatadogInternalLegacy
 import Foundation
 
 #if SPM_BUILD
@@ -308,8 +308,8 @@ public  class DataUploaderMock: DataUploaderType {
     }
 
     public func upload(
-        events: [DatadogInternal.Event],
-        context: DatadogInternal.DatadogContext,
+        events: [DatadogInternalLegacy.Event],
+        context: DatadogInternalLegacy.DatadogContext,
         previous: DataUploadStatus?) throws -> DataUploadStatus {
             uploadedEvents += events
             try onUpload?(previous)

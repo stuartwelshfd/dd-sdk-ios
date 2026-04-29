@@ -6,7 +6,7 @@
 
 #if canImport(SwiftUI)
 import SwiftUI
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// `SwiftUI.ViewModifier` which notifes RUM instrumentation when modified view appears and disappears.
 /// It makes an entry point to RUM views instrumentation in SwiftUI.

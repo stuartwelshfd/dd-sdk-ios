@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Publisher that sets Session Replay context for being utilized by other Features.
 internal class SRContextPublisher {

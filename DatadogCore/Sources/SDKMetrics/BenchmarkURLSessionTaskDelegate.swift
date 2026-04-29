@@ -7,7 +7,7 @@
 #if DD_BENCHMARK
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// `URLSessionTaskDelegate` implementation to collect network request metrics during benchmark execution.
 internal final class BenchmarkURLSessionTaskDelegate: NSObject, URLSessionTaskDelegate {

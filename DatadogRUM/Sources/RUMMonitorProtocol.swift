@@ -6,10 +6,10 @@
 
 import UIKit
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 // swiftlint:disable duplicate_imports
-@_exported import enum DatadogInternal.RUMMethod
+@_exported import enum DatadogInternalLegacy.RUMMethod
 // swiftlint:enable duplicate_imports
 
 /// The type of RUM resource.

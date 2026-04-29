@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// A type providing core context and writer for writing span events.
 internal protocol SpanWriteContext {

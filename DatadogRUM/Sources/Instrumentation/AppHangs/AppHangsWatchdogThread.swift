@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal protocol AppHangsObservingThread: Flushable {
     /// Starts the thread with given delegate.

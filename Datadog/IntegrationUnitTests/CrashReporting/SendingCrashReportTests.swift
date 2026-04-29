@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 @testable import DatadogCrashReporting
-import DatadogInternal
+import DatadogInternalLegacy
 @testable import DatadogLogsLegacy
 @testable import DatadogRUM
 

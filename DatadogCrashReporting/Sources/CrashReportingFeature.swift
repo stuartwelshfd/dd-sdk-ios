@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal final class CrashReportingFeature: DatadogFeature {
     static let name = "crash-reporter"

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal struct CoreContext {
     /// Provides the history of app foreground / background states.

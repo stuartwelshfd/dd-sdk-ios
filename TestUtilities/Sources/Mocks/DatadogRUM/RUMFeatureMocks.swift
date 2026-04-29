@@ -6,7 +6,7 @@
 
 import Foundation
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 @testable import DatadogRUM
 

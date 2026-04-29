@@ -5,7 +5,7 @@
  */
 
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Factory responsible for creating RUM user action commands from UIEvents.
 /// This abstraction allows for platform-specific implementations (iOS/tvOS).

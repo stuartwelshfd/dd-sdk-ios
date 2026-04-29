@@ -6,7 +6,7 @@
 
 import Foundation
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal final class LegacySwiftUIComponentDetector: SwiftUIComponentDetector {
     func createActionCommand(

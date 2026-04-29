@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import DatadogTrace
 
 internal class DDSpanObjc: NSObject, DatadogObjc.OTSpan {

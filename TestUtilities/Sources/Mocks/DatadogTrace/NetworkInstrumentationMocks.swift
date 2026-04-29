@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 extension SpanID: AnyMockable, RandomMockable {
     public static func mockAny() -> SpanID {

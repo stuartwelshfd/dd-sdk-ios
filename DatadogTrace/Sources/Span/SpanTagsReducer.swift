@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Reduces `DDSpan` tags and log attributes by extracting values that require separate handling.
 ///

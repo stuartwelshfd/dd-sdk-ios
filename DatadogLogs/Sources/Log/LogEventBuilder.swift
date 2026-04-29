@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Builds `LogEvent` from data received from the user and provided internally by the SDK.
 internal struct LogEventBuilder {

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Provides interfaces for accessing common properties and operations for a file.
 internal protocol FileProtocol {

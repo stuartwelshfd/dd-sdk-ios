@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// A concrete implementation of the `DataStore` protocol using file storage.
 internal final class FeatureDataStore: DataStore {

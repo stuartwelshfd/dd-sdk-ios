@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal protocol RUMScope: AnyObject {
     /// Container bundling dependencies for this scope.

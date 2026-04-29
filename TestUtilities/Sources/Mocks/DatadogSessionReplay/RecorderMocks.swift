@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import WebKit
 
-import DatadogInternal
+import DatadogInternalLegacy
 @_spi(Internal)
 @testable import DatadogSessionReplay
 

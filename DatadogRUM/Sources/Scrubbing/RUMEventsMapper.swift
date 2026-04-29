@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// The `EventMapper` for RUM events.
 internal struct RUMEventsMapper {

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Receiver to consume a Log message
 internal struct LogMessageReceiver: FeatureMessageReceiver {

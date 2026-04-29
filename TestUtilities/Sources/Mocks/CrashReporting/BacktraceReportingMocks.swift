@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 public struct BacktraceReporterMock: BacktraceReporting, @unchecked Sendable {
     /// The backtrace that will be returned by this mock.

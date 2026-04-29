@@ -24,7 +24,7 @@
  */
 
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 
 class AnyEncodableTests: XCTestCase {
     struct SomeEncodable: Encodable {

@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal struct ResourceRequestBuilder: FeatureRequestBuilder {
     /// Custom URL for uploading data to.

@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 @testable import DatadogCoreLegacy
 
 /// Observes unit tests execution and performs integrity checks after each test to ensure that the global state is unaltered.

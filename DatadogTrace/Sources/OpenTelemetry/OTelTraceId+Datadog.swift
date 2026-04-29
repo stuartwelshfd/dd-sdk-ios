@@ -6,7 +6,7 @@
 
 import Foundation
 import OpenTelemetryApi
-import DatadogInternal
+import DatadogInternalLegacy
 
 extension OpenTelemetryApi.TraceId {
     /// Converts OpenTelemetry `TraceId` to Datadog `TraceID`.

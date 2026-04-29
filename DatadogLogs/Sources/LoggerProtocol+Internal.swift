@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Internal Logger for Cross-Platform access.
 public protocol InternalLoggerProtocol {

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// `Logger` sending logs to Datadog.
 internal final class RemoteLogger: LoggerProtocol, Sendable {

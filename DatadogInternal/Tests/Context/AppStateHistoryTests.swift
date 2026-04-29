@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-import DatadogInternal
+import DatadogInternalLegacy
 
 class AppStateHistoryTests: XCTestCase {
     func testItBuildsAppStateFromUIApplicationState() {

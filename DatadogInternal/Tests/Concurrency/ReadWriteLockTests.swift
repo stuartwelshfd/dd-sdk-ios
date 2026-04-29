@@ -5,7 +5,7 @@
  */
 
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 
 final class ReadWriteLockTests: XCTestCase {
     @ReadWriteLock

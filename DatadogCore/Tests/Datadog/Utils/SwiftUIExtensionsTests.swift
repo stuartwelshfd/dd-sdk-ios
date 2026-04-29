@@ -11,7 +11,7 @@ import SwiftUI
 
 @testable import DatadogRUM
 @testable import DatadogCoreLegacy
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class CustomViewController: UIViewController {}
 

@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 @objc
 private class BaseClass: NSObject {

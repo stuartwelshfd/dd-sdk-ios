@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 // MARK: - Extracting SR context from `DatadogContext`
 

@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal final class FatalAppHangsHandler {
     /// RUM feature scope.

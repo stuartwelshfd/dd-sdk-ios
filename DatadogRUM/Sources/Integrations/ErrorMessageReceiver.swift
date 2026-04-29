@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal struct ErrorMessageReceiver: FeatureMessageReceiver {
     /// RUM feature scope.

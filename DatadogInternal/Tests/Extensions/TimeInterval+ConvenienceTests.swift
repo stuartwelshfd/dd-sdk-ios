@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 final class TimeIntervalConvenienceTests: XCTestCase {
     func test_Seconds() {

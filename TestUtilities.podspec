@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   ]
 
   s.dependency 'DatadogCoreLegacy'
-  s.dependency 'DatadogInternal'
+  s.dependency 'DatadogInternalLegacy'
   s.dependency 'DatadogLogsLegacy'
   s.dependency 'DatadogRUM'
   s.dependency 'DatadogSessionReplay'

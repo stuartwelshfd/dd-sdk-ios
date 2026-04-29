@@ -4,7 +4,7 @@
  * Copyright 2019-Present Datadog, Inc.
  */
 
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// A class for manual interaction with the RUM feature. It records RUM events that are sent to Datadog RUM.
 ///

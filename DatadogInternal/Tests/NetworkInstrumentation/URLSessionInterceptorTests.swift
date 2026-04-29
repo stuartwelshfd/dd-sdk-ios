@@ -7,7 +7,7 @@
 import XCTest
 
 import TestUtilities
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class URLSessionInterceptorTests: XCTestCase {
     // swiftlint:disable implicitly_unwrapped_optional

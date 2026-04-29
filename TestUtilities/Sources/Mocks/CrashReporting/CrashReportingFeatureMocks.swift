@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 @testable import DatadogLogsLegacy
 @testable import DatadogRUM
@@ -105,7 +105,7 @@ public class CrashReportSenderMock: CrashReportSender {
 
     public var didSendCrashReport: (() -> Void)?
 
-    public func send(launch: DatadogInternal.LaunchReport) {}
+    public func send(launch: DatadogInternalLegacy.LaunchReport) {}
 }
 
 public class CrashReceiverMock: FeatureMessageReceiver {

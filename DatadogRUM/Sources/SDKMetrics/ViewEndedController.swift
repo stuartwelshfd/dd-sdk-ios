@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Interface for Telemetry metrics.
 internal protocol MetricAttributesConvertible {

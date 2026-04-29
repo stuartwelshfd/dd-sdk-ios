@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Intercepts telemetry events sent through message bus.
 internal struct TelemetryInterceptor: FeatureMessageReceiver {

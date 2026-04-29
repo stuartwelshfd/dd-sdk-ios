@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 public class CoreLoggerMock: CoreLogger {
     @ReadWriteLock
@@ -60,7 +60,7 @@ public class TelemetryMock: Telemetry, CustomStringConvertible {
 
     public init() {}
 
-    public func send(telemetry: DatadogInternal.TelemetryMessage) {
+    public func send(telemetry: DatadogInternalLegacy.TelemetryMessage) {
         messages.append(telemetry)
 
         switch telemetry {

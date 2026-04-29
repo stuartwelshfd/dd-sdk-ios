@@ -7,7 +7,7 @@
 import XCTest
 @testable import TestUtilities
 
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class CoreRegistryTest: XCTestCase {
     func testRegistration() {

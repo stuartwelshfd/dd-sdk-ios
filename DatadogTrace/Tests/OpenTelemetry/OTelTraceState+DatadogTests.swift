@@ -6,7 +6,7 @@
 
 import XCTest
 import TestUtilities
-import DatadogInternal
+import DatadogInternalLegacy
 import OpenTelemetryApi
 
 @testable import DatadogTrace

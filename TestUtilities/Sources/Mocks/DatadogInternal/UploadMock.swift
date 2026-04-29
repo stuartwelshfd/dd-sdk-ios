@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 public class FeatureRequestBuilderMock: FeatureRequestBuilder {
     private let factory: (([Event], DatadogContext) throws -> URLRequest)

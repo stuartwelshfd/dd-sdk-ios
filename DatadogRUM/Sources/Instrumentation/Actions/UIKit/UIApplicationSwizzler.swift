@@ -5,7 +5,7 @@
  */
 
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal final class UIApplicationSwizzler {
     let sendEvent: SendEvent

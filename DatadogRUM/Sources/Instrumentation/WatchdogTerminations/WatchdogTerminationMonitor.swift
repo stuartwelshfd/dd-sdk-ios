@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Monitors the Watchdog Termination events and reports them to Datadog.
 internal final class WatchdogTerminationMonitor {
@@ -160,7 +160,7 @@ extension WatchdogTerminationMonitor: FeatureMessageReceiver {
     ///   - message: The feature message.
     ///   - core: The core instance.
     /// - Returns: Always `false`, because it doesn't block the message propagation.
-    func receive(message: DatadogInternal.FeatureMessage, from core: any DatadogInternal.DatadogCoreProtocol) -> Bool {
+    func receive(message: DatadogInternalLegacy.FeatureMessage, from core: any DatadogInternalLegacy.DatadogCoreProtocol) -> Bool {
         guard case .context(let context) = message else {
             return false
         }

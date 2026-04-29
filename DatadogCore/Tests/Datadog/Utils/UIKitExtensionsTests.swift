@@ -7,7 +7,7 @@
 import XCTest
 import UIKit
 @testable import DatadogRUM
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 class CustomSwiftViewController: UIViewController {}
 

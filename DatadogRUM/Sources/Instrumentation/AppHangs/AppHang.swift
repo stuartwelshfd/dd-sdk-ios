@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// An intermediate representation of an App Hang.
 internal struct AppHang: Codable {

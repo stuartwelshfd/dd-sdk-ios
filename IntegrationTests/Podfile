@@ -11,7 +11,7 @@ target 'Runner iOS' do
     pod 'DatadogObjc', :path => '..'
 
     target 'IntegrationScenarios' do
-        pod 'DatadogInternal', :path => '..'
+        pod 'DatadogInternalLegacy', :path => '..'
         pod 'TestUtilities', :path => '..'
     end
 end

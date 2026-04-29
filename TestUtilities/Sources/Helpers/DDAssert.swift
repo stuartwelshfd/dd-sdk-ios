@@ -8,7 +8,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 import XCTest
 
 public enum DDAssertError: Error {

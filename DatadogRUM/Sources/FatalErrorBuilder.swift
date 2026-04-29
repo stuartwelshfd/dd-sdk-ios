@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Builder for constructing fatal errors (such as Crashes or Fatal App Hangs) that can be sent to the last RUM session in previous process.
 internal struct FatalErrorBuilder {

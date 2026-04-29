@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Extends `RUMMonitorProtocol` with additional methods designed for Datadog cross-platform SDKs.
 public extension RUMMonitorProtocol {

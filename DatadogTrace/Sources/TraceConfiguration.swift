@@ -5,21 +5,21 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 // Export `DDURLSessionDelegate` elements to be available with `import DatadogTrace`:
 // swiftlint:disable duplicate_imports
-@_exported import class DatadogInternal.DatadogURLSessionDelegate
-@_exported import typealias DatadogInternal.DDURLSessionDelegate
-@_exported import protocol DatadogInternal.__URLSessionDelegateProviding
-@_exported import enum DatadogInternal.URLSessionInstrumentation
+@_exported import class DatadogInternalLegacy.DatadogURLSessionDelegate
+@_exported import typealias DatadogInternalLegacy.DDURLSessionDelegate
+@_exported import protocol DatadogInternalLegacy.__URLSessionDelegateProviding
+@_exported import enum DatadogInternalLegacy.URLSessionInstrumentation
 
-@_exported import class DatadogInternal.HTTPHeadersWriter
-@_exported import class DatadogInternal.B3HTTPHeadersWriter
-@_exported import class DatadogInternal.W3CHTTPHeadersWriter
-@_exported import enum DatadogInternal.TraceSamplingStrategy
-@_exported import enum DatadogInternal.TraceContextInjection
-@_exported import enum DatadogInternal.TracingHeaderType
+@_exported import class DatadogInternalLegacy.HTTPHeadersWriter
+@_exported import class DatadogInternalLegacy.B3HTTPHeadersWriter
+@_exported import class DatadogInternalLegacy.W3CHTTPHeadersWriter
+@_exported import enum DatadogInternalLegacy.TraceSamplingStrategy
+@_exported import enum DatadogInternalLegacy.TraceContextInjection
+@_exported import enum DatadogInternalLegacy.TracingHeaderType
 // swiftlint:enable duplicate_imports
 
 extension Trace {

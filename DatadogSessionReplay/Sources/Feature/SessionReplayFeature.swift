@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal class SessionReplayFeature: SessionReplayConfiguration, DatadogRemoteFeature {
     let requestBuilder: FeatureRequestBuilder

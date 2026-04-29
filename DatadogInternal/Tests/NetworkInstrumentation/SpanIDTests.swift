@@ -5,7 +5,7 @@
  */
 
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 
 class SpanIDTests: XCTestCase {
     func testToHexadecimalStringConversion() {

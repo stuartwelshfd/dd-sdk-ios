@@ -7,7 +7,7 @@
 import XCTest
 import TestUtilities
 
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 @testable import DatadogLogsLegacy
 @testable import DatadogCoreLegacy
 @testable import DatadogObjc

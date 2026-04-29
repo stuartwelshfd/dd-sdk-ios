@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 @available(iOS 13.0, *)
 internal struct SwiftUIWireframesBuilder: NodeWireframesBuilder {

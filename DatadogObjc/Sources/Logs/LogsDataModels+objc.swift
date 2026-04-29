@@ -6,7 +6,7 @@
 
 import Foundation
 import DatadogLogsLegacy
-import DatadogInternal
+import DatadogInternalLegacy
 
 @objc
 public class DDLogEvent: NSObject {

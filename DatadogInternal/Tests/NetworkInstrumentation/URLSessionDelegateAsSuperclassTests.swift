@@ -5,7 +5,7 @@
  */
 
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 
 @available(*, deprecated)
 internal final class _DatadogURLSessionDelegate: DatadogURLSessionDelegate {

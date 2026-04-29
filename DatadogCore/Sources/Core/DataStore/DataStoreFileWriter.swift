@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal enum DataStoreFileWritingError: Error {
     case failedToEncodeVersion(Error)

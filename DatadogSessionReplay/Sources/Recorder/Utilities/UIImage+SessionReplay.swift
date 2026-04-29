@@ -7,7 +7,7 @@
 #if os(iOS)
 import Foundation
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 import CommonCrypto
 
 private let bitsPerComponent = 8

@@ -5,11 +5,11 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 //swiftlint:disable duplicate_imports
-@_exported import enum DatadogInternal.TrackingConsent
-@_exported import protocol DatadogInternal.DatadogCoreProtocol
+@_exported import enum DatadogInternalLegacy.TrackingConsent
+@_exported import protocol DatadogInternalLegacy.DatadogCoreProtocol
 //swiftlint:enable duplicate_imports
 
 /// An entry point to Datadog SDK.

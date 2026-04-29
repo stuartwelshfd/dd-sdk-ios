@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// The low power mode publisher will publish the ``ProcessInfo/isLowPowerModeEnabled`` value
 /// by observing the `NSProcessInfoPowerStateDidChange` notification on the given

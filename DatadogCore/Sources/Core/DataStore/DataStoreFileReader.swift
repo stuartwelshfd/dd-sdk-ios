@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal enum DataStoreFileReadingError: Error {
     /// Indicates unexpected TLV blocks encountered during file reading.

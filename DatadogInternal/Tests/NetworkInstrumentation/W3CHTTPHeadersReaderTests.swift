@@ -5,7 +5,7 @@
  */
 
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 
 class W3CHTTPHeadersReaderTests: XCTestCase {
     func testW3CHTTPHeadersReaderReadsSingleHeader() {

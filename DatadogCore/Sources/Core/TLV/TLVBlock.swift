@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// Block size binary type
 internal typealias TLVBlockSize = UInt32

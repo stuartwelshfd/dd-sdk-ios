@@ -7,7 +7,7 @@
 #if os(iOS)
 
 import SwiftUI
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// A SwiftUI view that applies Session Replay privacy overrides to its content.
 ///

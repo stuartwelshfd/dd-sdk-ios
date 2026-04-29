@@ -6,7 +6,7 @@
 
 import XCTest
 @testable import DatadogRUM
-import DatadogInternal
+import DatadogInternalLegacy
 import TestUtilities
 
 /// Test case covering scenarios of starting RUM session.

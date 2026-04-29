@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import XCTest
-import DatadogInternal
+import DatadogInternalLegacy
 @_spi(Internal)
 import TestUtilities
 @_spi(Internal)

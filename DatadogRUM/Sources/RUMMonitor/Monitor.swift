@@ -5,7 +5,7 @@
  */
 
 import UIKit
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal extension RUMMethod {
     init(httpMethod: String?) {

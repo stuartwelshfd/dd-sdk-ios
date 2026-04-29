@@ -8,7 +8,7 @@ import UIKit
 import WebKit
 import DatadogCoreLegacy
 import DatadogWebViewTracking
-import class DatadogInternal.CoreRegistry
+import class DatadogInternalLegacy.CoreRegistry
 
 class WebViewTrackingFixtureViewController: UIViewController, WKNavigationDelegate {
     override func viewDidAppear(_ animated: Bool) {

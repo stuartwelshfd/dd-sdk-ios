@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// An observer notifying on`RUMContext` changes.
 internal protocol RUMContextObserver {

@@ -6,7 +6,7 @@
 
 import SwiftUI
 import DatadogTrace
-import DatadogInternal
+import DatadogInternalLegacy
 
 @available(iOS 14, *)
 internal class DebugManualTraceInjectionViewController: UIHostingController<DebugManualTraceInjectionView> {

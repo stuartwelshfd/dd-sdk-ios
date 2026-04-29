@@ -5,7 +5,7 @@
  */
 
 import XCTest
-@testable import DatadogInternal
+@testable import DatadogInternalLegacy
 
 final class FixedWidthIntegerConvenienceTests: XCTestCase {
     func test_Bytes() {

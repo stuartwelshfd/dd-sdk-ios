@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 // swiftlint:disable duplicate_imports
 #if SPM_BUILD

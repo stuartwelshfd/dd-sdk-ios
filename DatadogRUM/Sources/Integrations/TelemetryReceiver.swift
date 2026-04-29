@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal final class TelemetryReceiver: FeatureMessageReceiver {
     /// Maximum number of telemetry events allowed per RUM  sessions.
@@ -178,7 +178,7 @@ internal final class TelemetryReceiver: FeatureMessageReceiver {
         }
     }
 
-    private func send(usage: DatadogInternal.UsageTelemetry) {
+    private func send(usage: DatadogInternalLegacy.UsageTelemetry) {
         let date = dateProvider.now
 
         self.record(event: nil) { context, writer in
@@ -214,7 +214,7 @@ internal final class TelemetryReceiver: FeatureMessageReceiver {
     /// configuration for lazy initialization of the SDK.
     ///
     /// - Parameter configuration: The SDK configuration.
-    private func send(configuration: DatadogInternal.ConfigurationTelemetry) {
+    private func send(configuration: DatadogInternalLegacy.ConfigurationTelemetry) {
         guard configurationExtraSampler.sample() else {
             return
         }
@@ -355,7 +355,7 @@ private extension TelemetryUsageEvent.Telemetry.Usage {
 }
 
 private extension TelemetryUsageEvent.Telemetry.Usage.TelemetryCommonFeaturesUsage.SetTrackingConsent.TrackingConsent {
-    init(consent: DatadogInternal.TrackingConsent) {
+    init(consent: DatadogInternalLegacy.TrackingConsent) {
         switch consent {
         case .granted:
             self = .granted
@@ -368,7 +368,7 @@ private extension TelemetryUsageEvent.Telemetry.Usage.TelemetryCommonFeaturesUsa
 }
 
 private extension TelemetryConfigurationEvent.Telemetry.Configuration {
-    init(_ configuration: DatadogInternal.ConfigurationTelemetry) {
+    init(_ configuration: DatadogInternalLegacy.ConfigurationTelemetry) {
         self.init(
             actionNameAttribute: nil,
             allowFallbackToLocalStorage: nil,

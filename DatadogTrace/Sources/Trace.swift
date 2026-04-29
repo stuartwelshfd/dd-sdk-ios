@@ -5,7 +5,7 @@
  */
 
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 /// An entry point to Datadog Trace feature.
 public enum Trace {

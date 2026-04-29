@@ -9,7 +9,7 @@ import XCTest
 import CoreTelephony
 #endif
 
-import DatadogInternal
+import DatadogInternalLegacy
 import TestUtilities
 
 @testable import DatadogLogsLegacy

@@ -6,7 +6,7 @@
 
 #if os(iOS)
 import Foundation
-import DatadogInternal
+import DatadogInternalLegacy
 
 internal struct SegmentRequestBuilder: FeatureRequestBuilder {
     private static let newlineByte = "\n".data(using: .utf8)! // swiftlint:disable:this force_unwrapping
