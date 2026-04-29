@@ -5,7 +5,7 @@
 */
 
 #import <Foundation/Foundation.h>
-#import "ObjcExceptionHandler.h"
+#import "DDLegacyObjcExceptionHandler.h"
 
 @implementation __dd_private_ObjcExceptionHandler
 

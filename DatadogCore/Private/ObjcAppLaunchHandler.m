@@ -7,7 +7,7 @@
 #import <pthread.h>
 #import <sys/sysctl.h>
 
-#import "ObjcAppLaunchHandler.h"
+#import "DDLegacyObjcAppLaunchHandler.h"
 
 #if TARGET_OS_IOS || TARGET_OS_TV || TARGET_OS_MACCATALYST || TARGET_OS_VISION
 #import <UIKit/UIKit.h>
