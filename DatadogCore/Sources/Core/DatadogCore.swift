@@ -625,6 +625,6 @@ extension DatadogCore: Storage {
 // swiftlint:enable duplicate_imports
 
 internal let registerObjcExceptionHandlerOnce: () -> Void = {
-    ObjcException.rethrow = __dd_private_ObjcExceptionHandler.rethrow
+    ObjcException.rethrow = __dd_legacy_ObjcExceptionHandler.rethrow
     return {}
 }()

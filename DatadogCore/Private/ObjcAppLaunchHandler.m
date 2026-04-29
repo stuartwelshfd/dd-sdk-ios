@@ -24,11 +24,11 @@
 /// The time interval is relative to the 1 January 2001 00:00:00 GMT reference date.
 ///
 /// - Parameter timeInterval: Pointer to time interval to hold the process start time interval.
-int processStartTimeIntervalSinceReferenceDate(NSTimeInterval *timeInterval);
+int dd_legacy_processStartTimeIntervalSinceReferenceDate(NSTimeInterval *timeInterval);
 
 /// Tracks key timestamps in the app launch sequence
 /// ref. https://developer.apple.com/documentation/uikit/app_and_environment/responding_to_the_launch_of_your_app/about_the_app_launch_sequence
-@implementation __dd_private_AppLaunchHandler {
+@implementation __dd_legacy_AppLaunchHandler {
     NSTimeInterval _processStartTime;
     NSTimeInterval _timeToApplicationDidBecomeActive;
     BOOL _isActivePrewarm;
@@ -36,7 +36,7 @@ int processStartTimeIntervalSinceReferenceDate(NSTimeInterval *timeInterval);
 }
 
 /// Shared instance of the Application Launch Handler.
-static __dd_private_AppLaunchHandler *_shared;
+static __dd_legacy_AppLaunchHandler *_shared;
 
 + (void)load {
     // This is called at the `DatadogPrivate` load time, keep the work minimal
@@ -44,13 +44,13 @@ static __dd_private_AppLaunchHandler *_shared;
     [_shared observeNotificationCenter:NSNotificationCenter.defaultCenter];
 }
 
-+ (__dd_private_AppLaunchHandler *)shared {
++ (__dd_legacy_AppLaunchHandler *)shared {
     return _shared;
 }
 
 - (instancetype)initWithProcessInfo:(NSProcessInfo *)processInfo {
     NSTimeInterval startTime;
-    if (processStartTimeIntervalSinceReferenceDate(&startTime) != 0) {
+    if (dd_legacy_processStartTimeIntervalSinceReferenceDate(&startTime) != 0) {
         // Fall back to "now"
         startTime = CFAbsoluteTimeGetCurrent();
     }
@@ -124,7 +124,7 @@ static __dd_private_AppLaunchHandler *_shared;
 
 @end
 
-int processStartTimeIntervalSinceReferenceDate(NSTimeInterval *timeInterval) {
+int dd_legacy_processStartTimeIntervalSinceReferenceDate(NSTimeInterval *timeInterval) {
     // Query the current process' start time:
     // https://www.freebsd.org/cgi/man.cgi?sysctl(3)
     // https://github.com/darwin-on-arm/xnu/blob/707bfdc4e9a46e3612e53994fffc64542d3f7e72/bsd/sys/sysctl.h#L681

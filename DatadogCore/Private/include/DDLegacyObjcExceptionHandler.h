@@ -8,7 +8,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface __dd_private_ObjcExceptionHandler : NSObject
+@interface __dd_legacy_ObjcExceptionHandler : NSObject
 
 + (BOOL)catchException:(void(NS_NOESCAPE ^)(void))tryBlock error:(__autoreleasing NSError **)error
     NS_SWIFT_NAME(rethrow(_:));

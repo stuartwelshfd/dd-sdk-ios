@@ -13,10 +13,10 @@ typedef void (^UIApplicationDidBecomeActiveCallback) (NSTimeInterval);
 /// `AppLaunchHandler` tracks key timestamps in the app launch sequence,
 /// as described in Apple's documentation:
 /// https://developer.apple.com/documentation/uikit/app_and_environment/responding_to_the_launch_of_your_app/about_the_app_launch_sequence
-@interface __dd_private_AppLaunchHandler : NSObject
+@interface __dd_legacy_AppLaunchHandler : NSObject
 
 /// The singleton instance of `AppLaunchHandler`.
-@property (class, readonly) __dd_private_AppLaunchHandler *shared;
+@property (class, readonly) __dd_legacy_AppLaunchHandler *shared;
 
 /// The timestamp when the application process was launched.
 @property (atomic, readonly) NSDate* launchDate;

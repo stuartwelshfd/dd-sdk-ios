@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import "DDLegacyObjcExceptionHandler.h"
 
-@implementation __dd_private_ObjcExceptionHandler
+@implementation __dd_legacy_ObjcExceptionHandler
 
 + (BOOL)catchException:(void(NS_NOESCAPE ^)(void))tryBlock error:(__autoreleasing NSError **)error {
     @try {

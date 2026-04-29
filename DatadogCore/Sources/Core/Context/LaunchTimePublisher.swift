@@ -46,7 +46,7 @@ internal extension AppLaunchHandling {
     }
 }
 
-internal typealias AppLaunchHandler = __dd_private_AppLaunchHandler
+internal typealias AppLaunchHandler = __dd_legacy_AppLaunchHandler
 
 extension AppLaunchHandler: AppLaunchHandling {
     var timeToDidBecomeActive: TimeInterval? { launchTime?.doubleValue }
